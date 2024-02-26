@@ -1,0 +1,61 @@
+### Data Entities:
+
+1. **Addresses Entity:**
+   - **Business Meaning:** Represents the different addresses where students might reside or have lived.
+   - **Source Table:** Addresses
+   - **Table Join SQL:** No join needed as it's a standalone entity.
+
+2. **Courses Entity:**
+   - **Business Meaning:** Contains information about various courses offered.
+   - **Source Table:** Courses
+   - **Table Join SQL:** No join needed as it's a standalone entity.
+
+3. **Departments Entity:**
+   - **Business Meaning:** Represents the different academic departments.
+   - **Source Table:** Departments
+   - **Table Join SQL:** No join needed as it's a standalone entity.
+
+4. **Degree Programs Entity:**
+   - **Business Meaning:** Contains details about the degree programs offered by various departments.
+   - **Source Table:** Degree_Programs
+   - **Table Join SQL:** Join with Departments on `department_id`.
+
+5. **Sections Entity:**
+   - **Business Meaning:** Describes different sections of courses.
+   - **Source Table:** Sections
+   - **Table Join SQL:** Join with Courses on `course_id`.
+
+6. **Semesters Entity:**
+   - **Business Meaning:** Represents different academic semesters.
+   - **Source Table:** Semesters
+   - **Table Join SQL:** No join needed as it's a standalone entity.
+
+7. **Students Entity:**
+   - **Business Meaning:** Contains information about individual students.
+   - **Source Table:** Students
+   - **Table Join SQL:** Join with Addresses for `current_address_id` and `permanent_address_id`.
+
+8. **Student Enrolment Entity:**
+   - **Business Meaning:** Represents the enrollment of students into degree programs in specific semesters.
+   - **Source Table:** Student_Enrolment
+   - **Table Join SQL:** Join with Degree_Programs on `degree_program_id` and Semesters on `semester_id`.
+
+9. **Student Enrolment Courses Entity:**
+   - **Business Meaning:** Links student enrollments to specific courses.
+   - **Source Table:** Student_Enrolment_Courses
+   - **Table Join SQL:** Join with Courses on `course_id`.
+
+10. **Transcripts Entity:**
+    - **Business Meaning:** Contains information about student transcripts.
+    - **Source Table:** Transcripts
+    - **Table Join SQL:** No join needed as it's a standalone entity.
+
+11. **Transcript Contents Entity:**
+    - **Business Meaning:** Links student course enrollments to transcripts.
+    - **Source Table:** Transcript_Contents
+    - **Table Join SQL:** Join with Student_Enrolment_Courses on `student_course_id` and Transcripts on `transcript_id`.
+
+### Additional SQL Queries:
+You have provided various SQL queries related to the data field. If you have any specific queries or need further analysis, feel free to ask!
+
+
