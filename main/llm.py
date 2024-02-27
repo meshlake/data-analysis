@@ -3,4 +3,4 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-llm = ChatOpenAI()
+llm = ChatOpenAI(temperature=0, model="gpt-4-turbo-preview")

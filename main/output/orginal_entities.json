@@ -1,0 +1,38 @@
+[
+    {
+        "entityName": "Address Details",
+        "businessSemantics": "Contains detailed information about various addresses including primary address lines, city, zip code, state, and country.",
+        "sourceTable": "[\"Addresses\"]",
+        "joinSql": "SELECT * FROM Addresses"
+    },
+    {
+        "entityName": "Course Information",
+        "businessSemantics": "Holds information about courses including their names and descriptions.",
+        "sourceTable": "[\"Courses\"]",
+        "joinSql": "SELECT * FROM Courses"
+    },
+    {
+        "entityName": "Department Offerings",
+        "businessSemantics": "Represents departments and the number of degree programs they offer.",
+        "sourceTable": "[\"Departments\", \"Degree_Programs\"]",
+        "joinSql": "SELECT Departments.department_id, Departments.department_name, COUNT(Degree_Programs.degree_program_id) AS NumberOfDegrees FROM Departments JOIN Degree_Programs ON Departments.department_id = Degree_Programs.department_id GROUP BY Departments.department_id"
+    },
+    {
+        "entityName": "Student Enrollment",
+        "businessSemantics": "Links students to their enrolled degree programs and semesters.",
+        "sourceTable": "[\"Student_Enrolment\", \"Degree_Programs\", \"Semesters\", \"Students\"]",
+        "joinSql": "SELECT Student_Enrolment.*, Degree_Programs.degree_summary_name, Semesters.semester_name, Students.first_name, Students.last_name FROM Student_Enrolment JOIN Degree_Programs ON Student_Enrolment.degree_program_id = Degree_Programs.degree_program_id JOIN Semesters ON Student_Enrolment.semester_id = Semesters.semester_id JOIN Students ON Student_Enrolment.student_id = Students.student_id"
+    },
+    {
+        "entityName": "Section Details",
+        "businessSemantics": "Contains details about course sections including their names and descriptions.",
+        "sourceTable": "[\"Sections\"]",
+        "joinSql": "SELECT * FROM Sections"
+    },
+    {
+        "entityName": "Transcript Information",
+        "businessSemantics": "Represents transcripts and their contents, linking them to specific course enrollments.",
+        "sourceTable": "[\"Transcripts\", \"Transcript_Contents\", \"Student_Enrolment_Courses\"]",
+        "joinSql": "SELECT Transcripts.transcript_id, Transcripts.transcript_date, Transcript_Contents.student_course_id FROM Transcripts JOIN Transcript_Contents ON Transcripts.transcript_id = Transcript_Contents.transcript_id JOIN Student_Enrolment_Courses ON Transcript_Contents.student_course_id = Student_Enrolment_Courses.student_course_id"
+    }
+]

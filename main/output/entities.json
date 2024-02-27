@@ -1,0 +1,610 @@
+[
+    {
+        "entityName": "Address Details",
+        "businessSemantics": "Contains detailed information about various addresses including primary address lines, city, zip code, state, and country.",
+        "sourceTable": "[\"Addresses\"]",
+        "joinSql": "SELECT * FROM Addresses",
+        "fields": [
+            {
+                "name": "address_id",
+                "description": "address id",
+                "dataType": "INTEGER",
+                "nullable": "False",
+                "primaryKey": "True",
+                "foreignKey": "False"
+            },
+            {
+                "name": "line_1",
+                "description": "address line 1",
+                "type": "VARCHAR(255)",
+                "nullable": "False",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "line_2",
+                "description": "address line 2",
+                "type": "VARCHAR(255)",
+                "nullable": "True",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "line_3",
+                "description": "address line 3",
+                "type": "VARCHAR(255)",
+                "nullable": "True",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "city",
+                "description": "city",
+                "type": "VARCHAR(255)",
+                "nullable": "False",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "zip_postcode",
+                "description": "zip or postcode",
+                "type": "VARCHAR(20)",
+                "nullable": "False",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "state_province_county",
+                "description": "state, province, or county",
+                "type": "VARCHAR(255)",
+                "nullable": "False",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "country",
+                "description": "country",
+                "type": "VARCHAR(255)",
+                "nullable": "False",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "other_address_details",
+                "description": "other address details",
+                "type": "VARCHAR(255)",
+                "nullable": "True",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            }
+        ]
+    },
+    {
+        "entityName": "Course Information",
+        "businessSemantics": "Holds information about courses including their names and descriptions.",
+        "sourceTable": "[\"Courses\"]",
+        "joinSql": "SELECT * FROM Courses",
+        "fields": [
+            {
+                "name": "course_id",
+                "description": "course id",
+                "dataType": "INTEGER",
+                "nullable": "False",
+                "primaryKey": "True",
+                "foreignKey": "False"
+            },
+            {
+                "name": "course_name",
+                "description": "course name",
+                "type": "VARCHAR(255)",
+                "nullable": "False",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "course_description",
+                "description": "course description",
+                "type": "VARCHAR(255)",
+                "nullable": "False",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "other_details",
+                "description": "other details",
+                "type": "VARCHAR(255)",
+                "nullable": "True",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            }
+        ]
+    },
+    {
+        "entityName": "Department Offerings",
+        "businessSemantics": "Represents departments and the number of degree programs they offer.",
+        "sourceTable": "[\"Departments\", \"Degree_Programs\"]",
+        "joinSql": "SELECT Departments.department_id, Departments.department_name, COUNT(Degree_Programs.degree_program_id) AS NumberOfDegrees FROM Departments JOIN Degree_Programs ON Departments.department_id = Degree_Programs.department_id GROUP BY Departments.department_id",
+        "fields": [
+            {
+                "name": "department_id",
+                "description": "department id",
+                "dataType": "INTEGER",
+                "nullable": "False",
+                "primaryKey": "True",
+                "foreignKey": "False"
+            },
+            {
+                "name": "department_name",
+                "description": "department name",
+                "type": "VARCHAR(255)",
+                "nullable": "False",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "department_description",
+                "description": "department description",
+                "type": "VARCHAR(255)",
+                "nullable": "False",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "other_details",
+                "description": "other details",
+                "type": "VARCHAR(255)",
+                "nullable": "True",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "degree_program_id",
+                "description": "degree program id",
+                "dataType": "INTEGER",
+                "nullable": "False",
+                "primaryKey": "True",
+                "foreignKey": "False"
+            },
+            {
+                "name": "department_id",
+                "description": "department id",
+                "dataType": "INTEGER",
+                "nullable": "False",
+                "primaryKey": "False",
+                "foreignKey": "True"
+            },
+            {
+                "name": "degree_summary_name",
+                "description": "degree summary name",
+                "type": "VARCHAR(255)",
+                "nullable": "True",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "degree_summary_description",
+                "description": "degree summary description",
+                "type": "VARCHAR(255)",
+                "nullable": "True",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "other_details",
+                "description": "other details",
+                "type": "VARCHAR(255)",
+                "nullable": "True",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            }
+        ]
+    },
+    {
+        "entityName": "Student Enrollment",
+        "businessSemantics": "Links students to their enrolled degree programs and semesters.",
+        "sourceTable": "[\"Student_Enrolment\", \"Degree_Programs\", \"Semesters\", \"Students\"]",
+        "joinSql": "SELECT Student_Enrolment.*, Degree_Programs.degree_summary_name, Semesters.semester_name, Students.first_name, Students.last_name FROM Student_Enrolment JOIN Degree_Programs ON Student_Enrolment.degree_program_id = Degree_Programs.degree_program_id JOIN Semesters ON Student_Enrolment.semester_id = Semesters.semester_id JOIN Students ON Student_Enrolment.student_id = Students.student_id",
+        "fields": [
+            {
+                "name": "degree_program_id",
+                "description": "degree program id",
+                "dataType": "INTEGER",
+                "nullable": "False",
+                "primaryKey": "True",
+                "foreignKey": "False"
+            },
+            {
+                "name": "department_id",
+                "description": "department id",
+                "dataType": "INTEGER",
+                "nullable": "False",
+                "primaryKey": "False",
+                "foreignKey": "True"
+            },
+            {
+                "name": "degree_summary_name",
+                "description": "degree summary name",
+                "type": "VARCHAR(255)",
+                "nullable": "True",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "degree_summary_description",
+                "description": "degree summary description",
+                "type": "VARCHAR(255)",
+                "nullable": "True",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "other_details",
+                "description": "other details",
+                "type": "VARCHAR(255)",
+                "nullable": "True",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "semester_id",
+                "description": "semester id",
+                "dataType": "INTEGER",
+                "nullable": "False",
+                "primaryKey": "True",
+                "foreignKey": "False"
+            },
+            {
+                "name": "semester_name",
+                "description": "semester name",
+                "type": "VARCHAR(255)",
+                "nullable": "False",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "semester_description",
+                "description": "semester description",
+                "type": "VARCHAR(255)",
+                "nullable": "False",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "other_details",
+                "description": "other details",
+                "type": "VARCHAR(255)",
+                "nullable": "True",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "student_id",
+                "description": "student id",
+                "dataType": "INTEGER",
+                "nullable": "False",
+                "primaryKey": "True",
+                "foreignKey": "False"
+            },
+            {
+                "name": "current_address_id",
+                "description": "current address id",
+                "dataType": "INTEGER",
+                "nullable": "False",
+                "primaryKey": "False",
+                "foreignKey": "True"
+            },
+            {
+                "name": "permanent_address_id",
+                "description": "permanent address id",
+                "dataType": "INTEGER",
+                "nullable": "False",
+                "primaryKey": "False",
+                "foreignKey": "True"
+            },
+            {
+                "name": "first_name",
+                "description": "first name",
+                "dataType": "VARCHAR(80)",
+                "nullable": "True",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "middle_name",
+                "description": "middle name",
+                "dataType": "VARCHAR(40)",
+                "nullable": "True",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "last_name",
+                "description": "last name",
+                "dataType": "VARCHAR(40)",
+                "nullable": "True",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "cell_mobile_number",
+                "description": "cell/mobile number",
+                "dataType": "VARCHAR(40)",
+                "nullable": "True",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "email_address",
+                "description": "email address",
+                "dataType": "VARCHAR(40)",
+                "nullable": "True",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "ssn",
+                "description": "social security number",
+                "dataType": "VARCHAR(40)",
+                "nullable": "True",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "date_first_registered",
+                "description": "date first registered",
+                "dataType": "DATETIME",
+                "nullable": "True",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "date_left",
+                "description": "date left",
+                "dataType": "DATETIME",
+                "nullable": "True",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "other_student_details",
+                "description": "other student details",
+                "dataType": "VARCHAR(255)",
+                "nullable": "True",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "student_enrolment_id",
+                "description": "student enrolment id",
+                "dataType": "INTEGER",
+                "nullable": "False",
+                "primaryKey": "True",
+                "foreignKey": "False"
+            },
+            {
+                "name": "degree_program_id",
+                "description": "degree program id",
+                "dataType": "INTEGER",
+                "nullable": "False",
+                "primaryKey": "False",
+                "foreignKey": "True"
+            },
+            {
+                "name": "semester_id",
+                "description": "semester id",
+                "dataType": "INTEGER",
+                "nullable": "False",
+                "primaryKey": "False",
+                "foreignKey": "True"
+            },
+            {
+                "name": "student_id",
+                "description": "student id",
+                "dataType": "INTEGER",
+                "nullable": "False",
+                "primaryKey": "False",
+                "foreignKey": "True"
+            },
+            {
+                "name": "other_details",
+                "description": "other details",
+                "dataType": "VARCHAR(255)",
+                "nullable": "True",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            }
+        ]
+    },
+    {
+        "entityName": "Section Details",
+        "businessSemantics": "Contains details about course sections including their names and descriptions.",
+        "sourceTable": "[\"Sections\"]",
+        "joinSql": "SELECT * FROM Sections",
+        "fields": [
+            {
+                "name": "section_id",
+                "description": "section id",
+                "dataType": "INTEGER",
+                "nullable": "False",
+                "primaryKey": "True",
+                "foreignKey": "False"
+            },
+            {
+                "name": "course_id",
+                "description": "course id",
+                "dataType": "INTEGER",
+                "nullable": "False",
+                "primaryKey": "False",
+                "foreignKey": "True"
+            },
+            {
+                "name": "section_name",
+                "description": "section name",
+                "type": "VARCHAR(255)",
+                "nullable": "True",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "section_description",
+                "description": "section description",
+                "type": "VARCHAR(255)",
+                "nullable": "True",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "other_details",
+                "description": "other details",
+                "type": "VARCHAR(255)",
+                "nullable": "True",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            }
+        ]
+    },
+    {
+        "entityName": "Transcript Information",
+        "businessSemantics": "Represents transcripts and their contents, linking them to specific course enrollments.",
+        "sourceTable": "[\"Transcripts\", \"Transcript_Contents\", \"Student_Enrolment_Courses\"]",
+        "joinSql": "SELECT Transcripts.transcript_id, Transcripts.transcript_date, Transcript_Contents.student_course_id FROM Transcripts JOIN Transcript_Contents ON Transcripts.transcript_id = Transcript_Contents.transcript_id JOIN Student_Enrolment_Courses ON Transcript_Contents.student_course_id = Student_Enrolment_Courses.student_course_id",
+        "fields": [
+            {
+                "name": "course_id",
+                "description": "course id",
+                "dataType": "INTEGER",
+                "nullable": "False",
+                "primaryKey": "True",
+                "foreignKey": "False"
+            },
+            {
+                "name": "course_name",
+                "description": "course name",
+                "type": "VARCHAR(255)",
+                "nullable": "False",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "course_description",
+                "description": "course description",
+                "type": "VARCHAR(255)",
+                "nullable": "False",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "other_details",
+                "description": "other details",
+                "type": "VARCHAR(255)",
+                "nullable": "True",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "student_enrolment_id",
+                "description": "student enrolment id",
+                "dataType": "INTEGER",
+                "nullable": "False",
+                "primaryKey": "True",
+                "foreignKey": "False"
+            },
+            {
+                "name": "degree_program_id",
+                "description": "degree program id",
+                "dataType": "INTEGER",
+                "nullable": "False",
+                "primaryKey": "False",
+                "foreignKey": "True"
+            },
+            {
+                "name": "semester_id",
+                "description": "semester id",
+                "dataType": "INTEGER",
+                "nullable": "False",
+                "primaryKey": "False",
+                "foreignKey": "True"
+            },
+            {
+                "name": "student_id",
+                "description": "student id",
+                "dataType": "INTEGER",
+                "nullable": "False",
+                "primaryKey": "False",
+                "foreignKey": "True"
+            },
+            {
+                "name": "other_details",
+                "description": "other details",
+                "dataType": "VARCHAR(255)",
+                "nullable": "True",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "student_course_id",
+                "description": "student course id",
+                "dataType": "INTEGER",
+                "nullable": "False",
+                "primaryKey": "True",
+                "foreignKey": "False"
+            },
+            {
+                "name": "course_id",
+                "description": "course id",
+                "dataType": "INTEGER",
+                "nullable": "False",
+                "primaryKey": "False",
+                "foreignKey": "True"
+            },
+            {
+                "name": "student_enrolment_id",
+                "description": "student enrolment id",
+                "dataType": "INTEGER",
+                "nullable": "False",
+                "primaryKey": "False",
+                "foreignKey": "True"
+            },
+            {
+                "name": "transcript_id",
+                "description": "transcript id",
+                "dataType": "INTEGER",
+                "nullable": "False",
+                "primaryKey": "True",
+                "foreignKey": "False"
+            },
+            {
+                "name": "transcript_date",
+                "description": "transcript date",
+                "type": "DATETIME",
+                "nullable": "True",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "other_details",
+                "description": "other details",
+                "type": "VARCHAR(255)",
+                "nullable": "True",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "student_course_id",
+                "description": "student course id",
+                "dataType": "INTEGER",
+                "nullable": "False",
+                "primaryKey": "False",
+                "foreignKey": "True"
+            },
+            {
+                "name": "transcript_id",
+                "description": "transcript id",
+                "dataType": "INTEGER",
+                "nullable": "False",
+                "primaryKey": "False",
+                "foreignKey": "True"
+            }
+        ]
+    }
+]
