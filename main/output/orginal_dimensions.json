@@ -1,0 +1,425 @@
+[
+    {
+        "name": "city_address",
+        "businessSemantics": "zip code of the address in the city",
+        "sourceTable": "Addresses",
+        "field": "city",
+        "dataType": "String",
+        "isValid": "True",
+        "original": {
+            "question": "What is the zip code of the address in the city Port Chelsea?",
+            "query": "SELECT zip_postcode FROM Addresses WHERE city  =  'Port Chelsea'"
+        }
+    },
+    {
+        "name": "department_degree_count",
+        "businessSemantics": "department offering the most number of degrees",
+        "sourceTable": "Degree_Programs, Departments",
+        "field": "department_id",
+        "dataType": "String",
+        "isValid": "True",
+        "original": {
+            "question": "Which department offers the most number of degrees? List department name and id.",
+            "query": "SELECT T2.department_name ,  T1.department_id FROM Degree_Programs AS T1 JOIN Departments AS T2 ON T1.department_id  =  T2.department_id GROUP BY T1.department_id ORDER BY count(*) DESC LIMIT 1"
+        }
+    },
+    {
+        "name": "department_with_most_degrees",
+        "businessSemantics": "name and id of the department with the most number of degrees",
+        "sourceTable": "departments",
+        "field": "department_id",
+        "dataType": "String",
+        "isValid": "True",
+        "original": {
+            "question": "What is the name and id of the department with the most number of degrees ?",
+            "query": "select t2.department_name ,  t1.department_id from degree_programs as t1 join departments as t2 on t1.department_id  =  t2.department_id group by t1.department_id order by count(*) desc limit 1"
+        }
+    },
+    {
+        "name": "department_offering_degree",
+        "businessSemantics": "count of departments offering any degree",
+        "sourceTable": "Degree_Programs",
+        "field": "department_id",
+        "dataType": "Integer",
+        "isValid": "True",
+        "original": {
+            "question": "How many departments offer any degree?",
+            "query": "SELECT count(DISTINCT department_id) FROM Degree_Programs"
+        }
+    },
+    {
+        "name": "department_offering_degrees",
+        "businessSemantics": "count of different departments offering degrees",
+        "sourceTable": "Degree_Programs",
+        "field": "department_id",
+        "dataType": "Integer",
+        "isValid": "True",
+        "original": {
+            "question": "How many different departments offer degrees?",
+            "query": "SELECT count(DISTINCT department_id) FROM Degree_Programs"
+        }
+    },
+    {
+        "name": "engineering_department_degrees",
+        "businessSemantics": "count of degrees in the engineering department",
+        "sourceTable": [
+            "Departments",
+            "Degree_Programs"
+        ],
+        "field": "department_id",
+        "dataType": "Integer",
+        "isValid": "True",
+        "original": {
+            "question": "How many degrees does the engineering department have?",
+            "query": "SELECT count(*) FROM Departments AS T1 JOIN Degree_Programs AS T2 ON T1.department_id  =  T2.department_id WHERE T1.department_name  =  'engineer'"
+        }
+    },
+    {
+        "name": "course_information",
+        "businessSemantics": "names and id of courses with at most 2 sections",
+        "sourceTable": "Courses",
+        "field": "course_id",
+        "dataType": "String",
+        "isValid": "True",
+        "original": {
+            "question": "What are the names and id of courses having at most 2 sections?",
+            "query": "SELECT T1.course_name ,  T1.course_id FROM Courses AS T1 JOIN Sections AS T2 ON T1.course_id  =  T2.course_id GROUP BY T1.course_id HAVING count(*)  <=  2"
+        }
+    },
+    {
+        "name": "course_with_less_than_2_sections",
+        "businessSemantics": "names and ids of every course with less than 2 sections",
+        "sourceTable": "Courses",
+        "field": "course_id",
+        "dataType": "String",
+        "isValid": "True",
+        "original": {
+            "question": "What are the names and ids of every course with less than 2 sections?",
+            "query": "SELECT T1.course_name ,  T1.course_id FROM Courses AS T1 JOIN Sections AS T2 ON T1.course_id  =  T2.course_id GROUP BY T1.course_id HAVING count(*)  <=  2"
+        }
+    },
+    {
+        "name": "most_registered_semester",
+        "businessSemantics": "semester with the most student registrations",
+        "sourceTable": "Semesters, Student_Enrolment",
+        "field": "semester_id",
+        "dataType": "String",
+        "isValid": "True",
+        "original": {
+            "question": "What is the semester which most student registered in? Show both the name and the id.",
+            "query": "SELECT T1.semester_name ,  T1.semester_id FROM Semesters AS T1 JOIN Student_Enrolment AS T2 ON T1.semester_id  =  T2.semester_id GROUP BY T1.semester_id ORDER BY count(*) DESC LIMIT 1"
+        }
+    },
+    {
+        "name": "semester_with_most_students",
+        "businessSemantics": "name and id of the semester with the most students registered",
+        "sourceTable": "Semesters",
+        "field": "semester_id",
+        "dataType": "String",
+        "isValid": "True",
+        "original": {
+            "question": "For each semester, what is the name and id of the one with the most students registered?",
+            "query": "SELECT T1.semester_name ,  T1.semester_id FROM Semesters AS T1 JOIN Student_Enrolment AS T2 ON T1.semester_id  =  T2.semester_id GROUP BY T1.semester_id ORDER BY count(*) DESC LIMIT 1"
+        }
+    },
+    {
+        "name": "student_enrollment",
+        "businessSemantics": "students enrolled in 2 degree programs in one semester",
+        "sourceTable": "Students",
+        "field": "student_id",
+        "dataType": "String",
+        "isValid": "True",
+        "original": {
+            "question": "What are the first, middle, and last names, along with the ids, of all students who enrolled in 2 degree programs in one semester?",
+            "query": "SELECT T1.first_name ,  T1.middle_name ,  T1.last_name ,  T1.student_id FROM Students AS T1 JOIN Student_Enrolment AS T2 ON T1.student_id  =  T2.student_id GROUP BY T1.student_id HAVING count(*)  =  2"
+        }
+    },
+    {
+        "name": "degree_program_popularity",
+        "businessSemantics": "most enrolled program kind",
+        "sourceTable": "Degree_Programs",
+        "field": "degree_summary_name",
+        "dataType": "String",
+        "isValid": "True",
+        "original": {
+            "question": "Find the kind of program which most number of students are enrolled in?",
+            "query": "SELECT T1.degree_summary_name FROM Degree_Programs AS T1 JOIN Student_Enrolment AS T2 ON T1.degree_program_id  =  T2.degree_program_id GROUP BY T1.degree_summary_name ORDER BY count(*) DESC LIMIT 1"
+        }
+    },
+    {
+        "name": "degree_summary",
+        "businessSemantics": "degree summary name with the most number of students enrolled",
+        "sourceTable": "Degree_Programs",
+        "field": "degree_summary_name",
+        "dataType": "String",
+        "isValid": "True",
+        "original": {
+            "question": "What is the degree summary name that has the most number of students enrolled?",
+            "query": "SELECT T1.degree_summary_name FROM Degree_Programs AS T1 JOIN Student_Enrolment AS T2 ON T1.degree_program_id  =  T2.degree_program_id GROUP BY T1.degree_summary_name ORDER BY count(*) DESC LIMIT 1"
+        }
+    },
+    {
+        "name": "most_enrolled_program",
+        "businessSemantics": "program with the highest number of enrolled students",
+        "sourceTable": "Degree_Programs, Student_Enrolment",
+        "field": "degree_program_id",
+        "dataType": "String",
+        "isValid": "True",
+        "original": {
+            "question": "Find the program which most number of students are enrolled in. List both the id and the summary.",
+            "query": "SELECT T1.degree_program_id ,  T1.degree_summary_name FROM Degree_Programs AS T1 JOIN Student_Enrolment AS T2 ON T1.degree_program_id  =  T2.degree_program_id GROUP BY T1.degree_program_id ORDER BY count(*) DESC LIMIT 1"
+        }
+    },
+    {
+        "name": "degree_program_enrollment",
+        "businessSemantics": "program id and summary of the degree with the most students enrolled",
+        "sourceTable": "Degree_Programs, Student_Enrolment",
+        "field": "degree_program_id",
+        "dataType": "String",
+        "isValid": "True",
+        "original": {
+            "question": "What is the program id and the summary of the degree that has the most students enrolled?",
+            "query": "SELECT T1.degree_program_id ,  T1.degree_summary_name FROM Degree_Programs AS T1 JOIN Student_Enrolment AS T2 ON T1.degree_program_id  =  T2.degree_program_id GROUP BY T1.degree_program_id ORDER BY count(*) DESC LIMIT 1"
+        }
+    },
+    {
+        "name": "student_enrollment",
+        "businessSemantics": "student with the most enrollments",
+        "sourceTable": "Students, Student_Enrolment",
+        "field": "student_id",
+        "dataType": "String",
+        "isValid": "True",
+        "original": {
+            "question": "Which student has enrolled for the most times in any program? List the id, first name, middle name, last name, the number of enrollments and student id.",
+            "query": "SELECT T1.student_id ,  T1.first_name ,  T1.middle_name ,  T1.last_name ,  count(*) ,  T1.student_id FROM Students AS T1 JOIN Student_Enrolment AS T2 ON T1.student_id  =  T2.student_id GROUP BY T1.student_id ORDER BY count(*) DESC LIMIT 1"
+        }
+    },
+    {
+        "name": "unenrolled_semesters",
+        "businessSemantics": "semesters without student enrollment",
+        "sourceTable": "Semesters",
+        "field": "semester_name",
+        "dataType": "String",
+        "isValid": "True",
+        "original": {
+            "question": "Which semesters do not have any student enrolled? List the semester name.",
+            "query": "SELECT semester_name FROM Semesters WHERE semester_id NOT IN( SELECT semester_id FROM Student_Enrolment )"
+        }
+    },
+    {
+        "name": "semester_with_no_students",
+        "businessSemantics": "name of the semester with no students enrolled",
+        "sourceTable": "Semesters",
+        "field": "semester_name",
+        "dataType": "String",
+        "isValid": "True",
+        "original": {
+            "question": "What is the name of the semester with no students enrolled?",
+            "query": "SELECT semester_name FROM Semesters WHERE semester_id NOT IN( SELECT semester_id FROM Student_Enrolment )"
+        }
+    },
+    {
+        "name": "enrolled_courses",
+        "businessSemantics": "course names with students enrolled",
+        "sourceTable": "Courses",
+        "field": "course_name",
+        "dataType": "String",
+        "isValid": "True",
+        "original": {
+            "question": "What are all the course names of the courses which ever have students enrolled in?",
+            "query": "SELECT DISTINCT T1.course_name FROM Courses AS T1 JOIN Student_Enrolment_Courses AS T2 ON T1.course_id  =  T2.course_id"
+        }
+    },
+    {
+        "name": "enrolled_courses",
+        "businessSemantics": "names of all courses with students enrolled",
+        "sourceTable": "Courses",
+        "field": "course_name",
+        "dataType": "String",
+        "isValid": "True",
+        "original": {
+            "question": "What are the names of all courses that have some students enrolled?",
+            "query": "SELECT DISTINCT T1.course_name FROM Courses AS T1 JOIN Student_Enrolment_Courses AS T2 ON T1.course_id  =  T2.course_id"
+        }
+    },
+    {
+        "name": "course_name",
+        "businessSemantics": "name of the course with most number of enrollments",
+        "sourceTable": "Courses",
+        "field": "course_name",
+        "dataType": "String",
+        "isValid": "True",
+        "original": {
+            "question": "What's the name of the course with most number of enrollments?",
+            "query": "SELECT  T1.course_name FROM Courses AS T1 JOIN Student_Enrolment_Courses AS T2 ON T1.course_id  =  T2.course_id GROUP BY T1.course_name ORDER BY count(*) DESC LIMIT 1"
+        }
+    },
+    {
+        "name": "most_enrolled_course",
+        "businessSemantics": "name of the course with the most students enrolled",
+        "sourceTable": "Courses, Student_Enrolment_Courses",
+        "field": "course_name",
+        "dataType": "String",
+        "isValid": "True",
+        "original": {
+            "question": "What is the name of the course with the most students enrolled?",
+            "query": "SELECT  T1.course_name FROM Courses AS T1 JOIN Student_Enrolment_Courses AS T2 ON T1.course_id  =  T2.course_id GROUP BY T1.course_name ORDER BY count(*) DESC LIMIT 1"
+        }
+    },
+    {
+        "name": "student_last_name",
+        "businessSemantics": "last name of students in North Carolina not registered in any degree programs",
+        "sourceTable": "Students, Addresses",
+        "field": "last_name",
+        "dataType": "String",
+        "isValid": "True",
+        "original": {
+            "question": "What are the last name of the students who live in North Carolina but have not registered in any degree programs?",
+            "query": "SELECT T1.last_name FROM Students AS T1 JOIN Addresses AS T2 ON T1.current_address_id  =  T2.address_id WHERE T2.state_province_county  =  'NorthCarolina' EXCEPT SELECT DISTINCT T3.last_name FROM Students AS T3 JOIN Student_Enrolment AS T4 ON T3.student_id  =  T4.student_id"
+        }
+    },
+    {
+        "name": "transcript_details",
+        "businessSemantics": "date and id of the transcript with at least 2 course results",
+        "sourceTable": "Transcripts, Transcript_Contents",
+        "field": "transcript_id",
+        "dataType": "String",
+        "isValid": "True",
+        "original": {
+            "question": "Show the date and id of the transcript with at least 2 course results.",
+            "query": "SELECT T2.transcript_date ,  T1.transcript_id FROM Transcript_Contents AS T1 JOIN Transcripts AS T2 ON T1.transcript_id  =  T2.transcript_id GROUP BY T1.transcript_id HAVING count(*)  >=  2"
+        }
+    },
+    {
+        "name": "transcript_details",
+        "businessSemantics": "date and id of the transcript with at least 2 courses listed",
+        "sourceTable": "Transcripts, Transcript_Contents",
+        "field": "transcript_id",
+        "dataType": "String",
+        "isValid": "True",
+        "original": {
+            "question": "What is the date and id of the transcript with at least 2 courses listed?",
+            "query": "SELECT T2.transcript_date ,  T1.transcript_id FROM Transcript_Contents AS T1 JOIN Transcripts AS T2 ON T1.transcript_id  =  T2.transcript_id GROUP BY T1.transcript_id HAVING count(*)  >=  2"
+        }
+    },
+    {
+        "name": "most_students_address",
+        "businessSemantics": "address with the most number of students",
+        "sourceTable": "Addresses",
+        "field": "address_id",
+        "dataType": "String",
+        "isValid": "True",
+        "original": {
+            "question": "Which address holds the most number of students currently? List the address id and all lines.",
+            "query": "SELECT T1.address_id ,  T1.line_1 ,  T1.line_2 FROM Addresses AS T1 JOIN Students AS T2 ON T1.address_id  =  T2.current_address_id GROUP BY T1.address_id ORDER BY count(*) DESC LIMIT 1"
+        }
+    },
+    {
+        "name": "address_with_most_students",
+        "businessSemantics": "id, line 1, and line 2 of the address with the most students",
+        "sourceTable": "Addresses",
+        "field": "address_id",
+        "dataType": "String",
+        "isValid": "True",
+        "original": {
+            "question": "What is the id, line 1, and line 2 of the address with the most students?",
+            "query": "SELECT T1.address_id ,  T1.line_1 ,  T1.line_2 FROM Addresses AS T1 JOIN Students AS T2 ON T1.address_id  =  T2.current_address_id GROUP BY T1.address_id ORDER BY count(*) DESC LIMIT 1"
+        }
+    },
+    {
+        "name": "student_course_enrollment",
+        "businessSemantics": "maximum times a course enrollment appears in transcripts",
+        "sourceTable": "Transcript_Contents",
+        "field": "student_course_id",
+        "dataType": "String",
+        "isValid": "True",
+        "original": {
+            "question": "How many times at most can a course enrollment result show in different transcripts? Also show the course enrollment id.",
+            "query": "SELECT count(*) ,  student_course_id FROM Transcript_Contents GROUP BY student_course_id ORDER BY count(*) DESC LIMIT 1"
+        }
+    },
+    {
+        "name": "student_course_enrollment",
+        "businessSemantics": "maximum number of times a course shows up in different transcripts",
+        "sourceTable": "Transcript_Contents",
+        "field": "student_course_id",
+        "dataType": "String",
+        "isValid": "True",
+        "original": {
+            "question": "What is the maximum number of times that a course shows up in different transcripts and what is that course's enrollment id?",
+            "query": "SELECT count(*) ,  student_course_id FROM Transcript_Contents GROUP BY student_course_id ORDER BY count(*) DESC LIMIT 1"
+        }
+    },
+    {
+        "name": "transcript_date_least_results",
+        "businessSemantics": "date of the transcript with the least number of results",
+        "sourceTable": "Transcripts",
+        "field": "transcript_id",
+        "dataType": "String",
+        "isValid": "True",
+        "original": {
+            "question": "Show the date of the transcript which shows the least number of results, also list the id.",
+            "query": "SELECT T2.transcript_date ,  T1.transcript_id FROM Transcript_Contents AS T1 JOIN Transcripts AS T2 ON T1.transcript_id  =  T2.transcript_id GROUP BY T1.transcript_id ORDER BY count(*) ASC LIMIT 1"
+        }
+    },
+    {
+        "name": "transcript_least_results",
+        "businessSemantics": "date and id of the transcript with the least number of results",
+        "sourceTable": "Transcripts, Transcript_Contents",
+        "field": "transcript_id",
+        "dataType": "String",
+        "isValid": "True",
+        "original": {
+            "question": "What is the date and id of the transcript with the least number of results?",
+            "query": "SELECT T2.transcript_date ,  T1.transcript_id FROM Transcript_Contents AS T1 JOIN Transcripts AS T2 ON T1.transcript_id  =  T2.transcript_id GROUP BY T1.transcript_id ORDER BY count(*) ASC LIMIT 1"
+        }
+    },
+    {
+        "name": "enrollment_semester",
+        "businessSemantics": "semester when both Master and Bachelor students got enrolled",
+        "sourceTable": "Student_Enrolment",
+        "field": "semester_id",
+        "dataType": "String",
+        "isValid": "True",
+        "original": {
+            "question": "Find the semester when both Master students and Bachelor students got enrolled in.",
+            "query": "SELECT DISTINCT T2.semester_id FROM Degree_Programs AS T1 JOIN Student_Enrolment AS T2 ON T1.degree_program_id  =  T2.degree_program_id WHERE degree_summary_name  =  'Master' INTERSECT SELECT DISTINCT T2.semester_id FROM Degree_Programs AS T1 JOIN Student_Enrolment AS T2 ON T1.degree_program_id  =  T2.degree_program_id WHERE degree_summary_name  =  'Bachelor'"
+        }
+    },
+    {
+        "name": "semester_id_with_both_degrees",
+        "businessSemantics": "id of the semester with both Masters and Bachelors students enrolled",
+        "sourceTable": "Student_Enrolment",
+        "field": "semester_id",
+        "dataType": "String",
+        "isValid": "True",
+        "original": {
+            "question": "What is the id of the semester that had both Masters and Bachelors students enrolled?",
+            "query": "SELECT DISTINCT T2.semester_id FROM Degree_Programs AS T1 JOIN Student_Enrolment AS T2 ON T1.degree_program_id  =  T2.degree_program_id WHERE degree_summary_name  =  'Master' INTERSECT SELECT DISTINCT T2.semester_id FROM Degree_Programs AS T1 JOIN Student_Enrolment AS T2 ON T1.degree_program_id  =  T2.degree_program_id WHERE degree_summary_name  =  'Bachelor'"
+        }
+    },
+    {
+        "name": "student_addresses",
+        "businessSemantics": "count of unique student addresses",
+        "sourceTable": "Students",
+        "field": "current_address_id",
+        "dataType": "Integer",
+        "isValid": "True",
+        "original": {
+            "question": "How many different addresses do the students currently live?",
+            "query": "SELECT count(DISTINCT current_address_id) FROM Students"
+        }
+    },
+    {
+        "name": "student_details",
+        "businessSemantics": "student details in reversed lexicographical order",
+        "sourceTable": "Students",
+        "field": "other_student_details",
+        "dataType": "String",
+        "isValid": "True",
+        "original": {
+            "question": "List all the student details in reversed lexicographical order.",
+            "query": "SELECT other_student_details FROM Students ORDER BY other_student_details DESC"
+        }
+    }
+]

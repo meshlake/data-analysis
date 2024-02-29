@@ -3,6 +3,7 @@ from utils.init_logging import init_logging_config
 import parse_source_table
 import generate_entity
 from metrics import Metrics
+from dimension import Dimension
 
 if __name__ == "__main__":
     # 初始化日志配置
@@ -18,5 +19,9 @@ if __name__ == "__main__":
     # generate_entity.main()
 
     # 生成指标
-    metrics = Metrics()
-    metrics.build_orginal_metrics()
+    # metrics = Metrics()
+    # metrics.build_metrics()
+
+    # 生成维度
+    dimension = Dimension()
+    dimension.build_dimensions()

@@ -71,7 +71,7 @@ class Metrics:
         ]
         return filter_sql
 
-    def build_orginal_metrics(self):
+    def __build_orginal_metrics(self):
         sql = self.load_requirements()
         orginal_metrics = []
         file = get_output_path(self.storage)
@@ -89,3 +89,8 @@ class Metrics:
             print(f"Error: {e}")
         finally:
             write_json_to_file(orginal_metrics, file)
+
+        return orginal_metrics
+
+    def build_metrics(self):
+        return self.__build_orginal_metrics()
