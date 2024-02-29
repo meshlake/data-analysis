@@ -61,11 +61,14 @@ class Entity:
         ]
 
     def __build_original_entities(self):
-
+        logging.info("start to build original entities...")
+        
         (filter_sql, schema) = self.__load_requirements()
 
         sql = filter_sql.__str__()
         original_entities = self.builder.invoke(f"```{schema}```\n```{sql}```")
+
+        logging.info("build original entities success")
 
         original_storage_file = get_output_path(self.original_storage)
         delete_file(original_storage_file)
@@ -102,6 +105,6 @@ class Entity:
         return [
             entity
             for entity in entities
-            if entity["sourceTable"] in source_tables
-            or entity["sourceTable"] == source_tables
+            if all(table in entity["sourceTable"] for table in source_tables)
+            or set(entity["sourceTable"]) == set(source_tables)
         ]

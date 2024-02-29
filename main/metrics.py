@@ -31,7 +31,7 @@ class Metrics:
                 {
                     "name": "student_average_score",
                     "businessSemantics": "average score of all students",
-                    "sourceTable": "student_scores",
+                    "sourceTable": ["student_scores"],
                     "aggregation": "AVG",
                     "field": "score",
                     "dataType": "FLOAT",

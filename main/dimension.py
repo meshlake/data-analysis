@@ -31,7 +31,7 @@ class Dimension:
                 {
                     "name": "student_course",
                     "businessSemantics": "average score of the course",
-                    "sourceTable": "student_scores",
+                    "sourceTable": ["student_scores"],
                     "field": "course_id",
                     "dataType": "String",
                     "isValid": "True",

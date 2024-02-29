@@ -8,11 +8,15 @@
         "aggregation": "COUNT",
         "field": "*",
         "dataType": "INTEGER",
-        "isValid": "True",
         "original": {
             "question": "How many courses in total are listed?",
             "query": "SELECT count(*) FROM Courses"
-        }
+        },
+        "entities": [
+            "Courses",
+            "Sections",
+            "Student Enrolment Courses"
+        ]
     },
     {
         "name": "total_courses_count",
@@ -23,11 +27,15 @@
         "aggregation": "COUNT",
         "field": "*",
         "dataType": "INTEGER",
-        "isValid": "True",
         "original": {
             "question": "How many courses are there?",
             "query": "SELECT count(*) FROM Courses"
-        }
+        },
+        "entities": [
+            "Courses",
+            "Sections",
+            "Student Enrolment Courses"
+        ]
     },
     {
         "name": "department_with_most_degrees",
@@ -39,11 +47,13 @@
         "aggregation": "COUNT",
         "field": "*",
         "dataType": "INTEGER",
-        "isValid": "True",
         "original": {
             "question": "Which department offers the most number of degrees? List department name and id.",
             "query": "SELECT T2.department_name ,  T1.department_id FROM Degree_Programs AS T1 JOIN Departments AS T2 ON T1.department_id  =  T2.department_id GROUP BY T1.department_id ORDER BY count(*) DESC LIMIT 1"
-        }
+        },
+        "entities": [
+            "Degree Programs"
+        ]
     },
     {
         "name": "department_with_most_degrees",
@@ -55,11 +65,11 @@
         "aggregation": "COUNT",
         "field": "*",
         "dataType": "INT",
-        "isValid": "True",
         "original": {
             "question": "What is the name and id of the department with the most number of degrees ?",
             "query": "select t2.department_name ,  t1.department_id from degree_programs as t1 join departments as t2 on t1.department_id  =  t2.department_id group by t1.department_id order by count(*) desc limit 1"
-        }
+        },
+        "entities": []
     },
     {
         "name": "count_departments_offering_degrees",
@@ -70,11 +80,14 @@
         "aggregation": "COUNT",
         "field": "department_id",
         "dataType": "INTEGER",
-        "isValid": "True",
         "original": {
             "question": "How many departments offer any degree?",
             "query": "SELECT count(DISTINCT department_id) FROM Degree_Programs"
-        }
+        },
+        "entities": [
+            "Degree Programs",
+            "Student Enrolment"
+        ]
     },
     {
         "name": "unique_department_count",
@@ -85,11 +98,14 @@
         "aggregation": "COUNT",
         "field": "department_id",
         "dataType": "INTEGER",
-        "isValid": "True",
         "original": {
             "question": "How many different departments offer degrees?",
             "query": "SELECT count(DISTINCT department_id) FROM Degree_Programs"
-        }
+        },
+        "entities": [
+            "Degree Programs",
+            "Student Enrolment"
+        ]
     },
     {
         "name": "distinct_degree_names_count",
@@ -100,11 +116,14 @@
         "aggregation": "COUNT",
         "field": "degree_summary_name",
         "dataType": "INTEGER",
-        "isValid": "True",
         "original": {
             "question": "How many different degree names are offered?",
             "query": "SELECT count(DISTINCT degree_summary_name) FROM Degree_Programs"
-        }
+        },
+        "entities": [
+            "Degree Programs",
+            "Student Enrolment"
+        ]
     },
     {
         "name": "total_unique_degrees_offered",
@@ -115,11 +134,14 @@
         "aggregation": "COUNT",
         "field": "degree_summary_name",
         "dataType": "INTEGER",
-        "isValid": "True",
         "original": {
             "question": "How many different degrees are offered?",
             "query": "SELECT count(DISTINCT degree_summary_name) FROM Degree_Programs"
-        }
+        },
+        "entities": [
+            "Degree Programs",
+            "Student Enrolment"
+        ]
     },
     {
         "name": "engineering_department_degrees_count",
@@ -131,11 +153,13 @@
         "aggregation": "COUNT",
         "field": "*",
         "dataType": "INTEGER",
-        "isValid": "True",
         "original": {
             "question": "How many degrees does the engineering department offer?",
             "query": "SELECT count(*) FROM Departments AS T1 JOIN Degree_Programs AS T2 ON T1.department_id  =  T2.department_id WHERE T1.department_name  =  'engineer'"
-        }
+        },
+        "entities": [
+            "Degree Programs"
+        ]
     },
     {
         "name": "engineering_department_degree_count",
@@ -147,11 +171,13 @@
         "aggregation": "COUNT",
         "field": "*",
         "dataType": "INTEGER",
-        "isValid": "True",
         "original": {
             "question": "How many degrees does the engineering department have?",
             "query": "SELECT count(*) FROM Departments AS T1 JOIN Degree_Programs AS T2 ON T1.department_id  =  T2.department_id WHERE T1.department_name  =  'engineer'"
-        }
+        },
+        "entities": [
+            "Degree Programs"
+        ]
     },
     {
         "name": "most_registered_semester",
@@ -163,11 +189,13 @@
         "aggregation": "COUNT",
         "field": "*",
         "dataType": "INTEGER",
-        "isValid": "True",
         "original": {
             "question": "What is the semester which most student registered in? Show both the name and the id.",
             "query": "SELECT T1.semester_name ,  T1.semester_id FROM Semesters AS T1 JOIN Student_Enrolment AS T2 ON T1.semester_id  =  T2.semester_id GROUP BY T1.semester_id ORDER BY count(*) DESC LIMIT 1"
-        }
+        },
+        "entities": [
+            "Student Enrolment"
+        ]
     },
     {
         "name": "most_enrolled_program",
@@ -179,11 +207,13 @@
         "aggregation": "COUNT",
         "field": "*",
         "dataType": "INT",
-        "isValid": "True",
         "original": {
             "question": "Find the kind of program which most number of students are enrolled in?",
             "query": "SELECT T1.degree_summary_name FROM Degree_Programs AS T1 JOIN Student_Enrolment AS T2 ON T1.degree_program_id  =  T2.degree_program_id GROUP BY T1.degree_summary_name ORDER BY count(*) DESC LIMIT 1"
-        }
+        },
+        "entities": [
+            "Student Enrolment"
+        ]
     },
     {
         "name": "most_enrolled_degree_summary_name",
@@ -195,11 +225,13 @@
         "aggregation": "COUNT",
         "field": "*",
         "dataType": "STRING",
-        "isValid": "True",
         "original": {
             "question": "What is the degree summary name that has the most number of students enrolled?",
             "query": "SELECT T1.degree_summary_name FROM Degree_Programs AS T1 JOIN Student_Enrolment AS T2 ON T1.degree_program_id  =  T2.degree_program_id GROUP BY T1.degree_summary_name ORDER BY count(*) DESC LIMIT 1"
-        }
+        },
+        "entities": [
+            "Student Enrolment"
+        ]
     },
     {
         "name": "most_enrolled_program",
@@ -211,11 +243,13 @@
         "aggregation": "COUNT",
         "field": "*",
         "dataType": "INTEGER",
-        "isValid": "True",
         "original": {
             "question": "Find the program which most number of students are enrolled in. List both the id and the summary.",
             "query": "SELECT T1.degree_program_id ,  T1.degree_summary_name FROM Degree_Programs AS T1 JOIN Student_Enrolment AS T2 ON T1.degree_program_id  =  T2.degree_program_id GROUP BY T1.degree_program_id ORDER BY count(*) DESC LIMIT 1"
-        }
+        },
+        "entities": [
+            "Student Enrolment"
+        ]
     },
     {
         "name": "student_with_most_enrollments",
@@ -227,11 +261,13 @@
         "aggregation": "COUNT",
         "field": "*",
         "dataType": "INTEGER",
-        "isValid": "True",
         "original": {
             "question": "Which student has enrolled for the most times in any program? List the id, first name, middle name, last name, the number of enrollments and student id.",
             "query": "SELECT T1.student_id ,  T1.first_name ,  T1.middle_name ,  T1.last_name ,  count(*) ,  T1.student_id FROM Students AS T1 JOIN Student_Enrolment AS T2 ON T1.student_id  =  T2.student_id GROUP BY T1.student_id ORDER BY count(*) DESC LIMIT 1"
-        }
+        },
+        "entities": [
+            "Student Enrolment"
+        ]
     },
     {
         "name": "top_enrolled_student_details",
@@ -243,11 +279,13 @@
         "aggregation": "COUNT",
         "field": "*",
         "dataType": "INT",
-        "isValid": "True",
         "original": {
             "question": "What is the first, middle, and last name, along with the id and number of enrollments, for the student who enrolled the most in any program?",
             "query": "SELECT T1.student_id ,  T1.first_name ,  T1.middle_name ,  T1.last_name ,  count(*) ,  T1.student_id FROM Students AS T1 JOIN Student_Enrolment AS T2 ON T1.student_id  =  T2.student_id GROUP BY T1.student_id ORDER BY count(*) DESC LIMIT 1"
-        }
+        },
+        "entities": [
+            "Student Enrolment"
+        ]
     },
     {
         "name": "course_with_most_enrollments",
@@ -259,11 +297,13 @@
         "aggregation": "COUNT",
         "field": "*",
         "dataType": "STRING",
-        "isValid": "True",
         "original": {
             "question": "What's the name of the course with most number of enrollments?",
             "query": "SELECT  T1.course_name FROM Courses AS T1 JOIN Student_Enrolment_Courses AS T2 ON T1.course_id  =  T2.course_id GROUP BY T1.course_name ORDER BY count(*) DESC LIMIT 1"
-        }
+        },
+        "entities": [
+            "Student Enrolment Courses"
+        ]
     },
     {
         "name": "course_with_most_students",
@@ -275,11 +315,13 @@
         "aggregation": "COUNT",
         "field": "*",
         "dataType": "STRING",
-        "isValid": "True",
         "original": {
             "question": "What is the name of the course with the most students enrolled?",
             "query": "SELECT  T1.course_name FROM Courses AS T1 JOIN Student_Enrolment_Courses AS T2 ON T1.course_id  =  T2.course_id GROUP BY T1.course_name ORDER BY count(*) DESC LIMIT 1"
-        }
+        },
+        "entities": [
+            "Student Enrolment Courses"
+        ]
     },
     {
         "name": "timmothy_ward_phone_number",
@@ -290,11 +332,14 @@
         "condition": "first_name = 'Timmothy' AND last_name = 'Ward'",
         "field": "cell_mobile_number",
         "dataType": "STRING",
-        "isValid": "True",
         "original": {
             "question": "What is the phone number of the man with the first name Timmothy and the last name Ward?",
             "query": "SELECT cell_mobile_number FROM Students WHERE first_name  =  'Timmothy' AND last_name  =  'Ward'"
-        }
+        },
+        "entities": [
+            "Students",
+            "Student Enrolment"
+        ]
     },
     {
         "name": "address_with_most_students",
@@ -306,11 +351,13 @@
         "aggregation": "COUNT",
         "field": "*",
         "dataType": "INT",
-        "isValid": "True",
         "original": {
             "question": "Which address holds the most number of students currently? List the address id and all lines.",
             "query": "SELECT T1.address_id ,  T1.line_1 ,  T1.line_2 FROM Addresses AS T1 JOIN Students AS T2 ON T1.address_id  =  T2.current_address_id GROUP BY T1.address_id ORDER BY count(*) DESC LIMIT 1"
-        }
+        },
+        "entities": [
+            "Students"
+        ]
     },
     {
         "name": "average_transcript_print_date",
@@ -321,11 +368,14 @@
         "aggregation": "AVG",
         "field": "transcript_date",
         "dataType": "DATE",
-        "isValid": "True",
         "original": {
             "question": "On average, when were the transcripts printed?",
             "query": "SELECT avg(transcript_date) FROM Transcripts"
-        }
+        },
+        "entities": [
+            "Transcripts",
+            "Transcript Contents"
+        ]
     },
     {
         "name": "total_transcripts_released",
@@ -336,11 +386,14 @@
         "aggregation": "COUNT",
         "field": "*",
         "dataType": "INTEGER",
-        "isValid": "True",
         "original": {
             "question": "How many transcripts are released?",
             "query": "SELECT count(*) FROM Transcripts"
-        }
+        },
+        "entities": [
+            "Transcripts",
+            "Transcript Contents"
+        ]
     },
     {
         "name": "total_transcripts_count",
@@ -351,11 +404,14 @@
         "aggregation": "COUNT",
         "field": "*",
         "dataType": "INTEGER",
-        "isValid": "True",
         "original": {
             "question": "How many transcripts are listed?",
             "query": "SELECT count(*) FROM Transcripts"
-        }
+        },
+        "entities": [
+            "Transcripts",
+            "Transcript Contents"
+        ]
     },
     {
         "name": "last_transcript_release_date",
@@ -366,11 +422,14 @@
         "aggregation": "MAX",
         "field": "transcript_date",
         "dataType": "DATE",
-        "isValid": "True",
         "original": {
             "question": "What is the last transcript release date?",
             "query": "SELECT transcript_date FROM Transcripts ORDER BY transcript_date DESC LIMIT 1"
-        }
+        },
+        "entities": [
+            "Transcripts",
+            "Transcript Contents"
+        ]
     },
     {
         "name": "last_transcript_release_date",
@@ -381,11 +440,14 @@
         "aggregation": "MAX",
         "field": "transcript_date",
         "dataType": "DATE",
-        "isValid": "True",
         "original": {
             "question": "When was the last transcript released?",
             "query": "SELECT transcript_date FROM Transcripts ORDER BY transcript_date DESC LIMIT 1"
-        }
+        },
+        "entities": [
+            "Transcripts",
+            "Transcript Contents"
+        ]
     },
     {
         "name": "maximum_course_enrollment_appearances",
@@ -396,11 +458,13 @@
         "aggregation": "COUNT",
         "field": "student_course_id",
         "dataType": "INT",
-        "isValid": "True",
         "original": {
             "question": "How many times at most can a course enrollment result show in different transcripts? Also show the course enrollment id.",
             "query": "SELECT count(*) ,  student_course_id FROM Transcript_Contents GROUP BY student_course_id ORDER BY count(*) DESC LIMIT 1"
-        }
+        },
+        "entities": [
+            "Transcript Contents"
+        ]
     },
     {
         "name": "maximum_course_enrollment",
@@ -411,11 +475,13 @@
         "aggregation": "COUNT",
         "field": "student_course_id",
         "dataType": "INTEGER",
-        "isValid": "True",
         "original": {
             "question": "What is the maximum number of times that a course shows up in different transcripts and what is that course's enrollment id?",
             "query": "SELECT count(*) ,  student_course_id FROM Transcript_Contents GROUP BY student_course_id ORDER BY count(*) DESC LIMIT 1"
-        }
+        },
+        "entities": [
+            "Transcript Contents"
+        ]
     },
     {
         "name": "transcript_least_results_date_and_id",
@@ -427,11 +493,13 @@
         "aggregation": "COUNT",
         "field": "*",
         "dataType": "INT",
-        "isValid": "True",
         "original": {
             "question": "Show the date of the transcript which shows the least number of results, also list the id.",
             "query": "SELECT T2.transcript_date ,  T1.transcript_id FROM Transcript_Contents AS T1 JOIN Transcripts AS T2 ON T1.transcript_id  =  T2.transcript_id GROUP BY T1.transcript_id ORDER BY count(*) ASC LIMIT 1"
-        }
+        },
+        "entities": [
+            "Transcript Contents"
+        ]
     },
     {
         "name": "transcript_with_least_results",
@@ -443,11 +511,13 @@
         "aggregation": "COUNT",
         "field": "*",
         "dataType": "INTEGER",
-        "isValid": "True",
         "original": {
             "question": "What is the date and id of the transcript with the least number of results?",
             "query": "SELECT T2.transcript_date ,  T1.transcript_id FROM Transcript_Contents AS T1 JOIN Transcripts AS T2 ON T1.transcript_id  =  T2.transcript_id GROUP BY T1.transcript_id ORDER BY count(*) ASC LIMIT 1"
-        }
+        },
+        "entities": [
+            "Transcript Contents"
+        ]
     },
     {
         "name": "distinct_student_addresses_count",
@@ -458,11 +528,14 @@
         "aggregation": "COUNT",
         "field": "current_address_id",
         "dataType": "INTEGER",
-        "isValid": "True",
         "original": {
             "question": "How many different addresses do the students currently live?",
             "query": "SELECT count(DISTINCT current_address_id) FROM Students"
-        }
+        },
+        "entities": [
+            "Students",
+            "Student Enrolment"
+        ]
     },
     {
         "name": "unique_student_addresses_count",
@@ -473,10 +546,13 @@
         "aggregation": "COUNT",
         "field": "current_address_id",
         "dataType": "INT",
-        "isValid": "True",
         "original": {
             "question": "What are the different addresses that have students living there?",
             "query": "SELECT count(DISTINCT current_address_id) FROM Students"
-        }
+        },
+        "entities": [
+            "Students",
+            "Student Enrolment"
+        ]
     }
 ]
