@@ -5,9 +5,13 @@ from output_manage import get_output_path
 from utils.util import read_json, write_json_to_file, delete_file
 from tqdm import tqdm
 from langchain_core.exceptions import OutputParserException
+from entity import Entity
 
 
 class Metrics:
+
+    orginal_storage = "orginal_metrics.json"
+    storage = "metrics.json"
 
     def __init__(self):
         prompt = """
@@ -56,9 +60,7 @@ class Metrics:
 
         self.builder = ChatModel(prompt=prompt, is_json_output=True)
 
-        self.storage = "orginal_metrics.json"
-
-    def load_requirements(self):
+    def __load_requirements(self):
         """filter sql data
 
         return:
@@ -72,9 +74,9 @@ class Metrics:
         return filter_sql
 
     def __build_orginal_metrics(self):
-        sql = self.load_requirements()
+        sql = self.__load_requirements()
         orginal_metrics = []
-        file = get_output_path(self.storage)
+        file = get_output_path(self.orginal_storage)
         delete_file(file)
 
         try:
@@ -93,4 +95,17 @@ class Metrics:
         return orginal_metrics
 
     def build_metrics(self):
-        return self.__build_orginal_metrics()
+        orginal_metrics = self.__build_orginal_metrics()
+
+        def associate_entities(metric):
+            associated_entities = Entity.search(metric["sourceTable"])
+            del metric["isValid"]
+            metric["entities"] = [entity["name"] for entity in associated_entities]
+            return metric
+
+        metrics = [associate_entities(metric) for metric in orginal_metrics]
+
+        delete_file(get_output_path(self.storage))
+        write_json_to_file(metrics, get_output_path(self.storage))
+
+        return metrics

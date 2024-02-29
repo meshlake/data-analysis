@@ -2,12 +2,17 @@ import os
 
 from tqdm import tqdm
 from llm import ChatModel
+from entity import Entity
 from output_manage import get_output_path
 from utils.util import delete_file, read_json, write_json_to_file
 from langchain_core.exceptions import OutputParserException
 
 
 class Dimension:
+
+    orginal_storage = "orginal_dimensions.json"
+    storage = "dimensions.json"
+
     def __init__(self):
         prompt = """
                 You are a data analysis expert who is proficient in SQL. 
@@ -54,9 +59,7 @@ class Dimension:
 
         self.builder = ChatModel(prompt=prompt, is_json_output=True)
 
-        self.storage = "orginal_dimensions.json"
-
-    def load_requirements(self):
+    def __load_requirements(self):
         """filter sql data
 
         return:
@@ -70,7 +73,7 @@ class Dimension:
         return filter_sql
 
     def __build_orginal_dimensions(self):
-        sql = self.load_requirements()
+        sql = self.__load_requirements()
         orginal_dimensions = []
         file = get_output_path(self.storage)
         delete_file(file)
@@ -90,4 +93,16 @@ class Dimension:
         return orginal_dimensions
 
     def build_dimensions(self):
+        orginal_dimensions = self.__build_orginal_dimensions()
+
+        def associate_entities(dimension):
+            associated_entities = Entity.search(dimension["sourceTable"])
+            del dimension["isValid"]
+            dimension["entities"] = [entity["name"] for entity in associated_entities]
+            return dimension
+
+        dimensions = [associate_entities(dimension) for dimension in orginal_dimensions]
+
+        delete_file(get_output_path(self.storage))
+        write_json_to_file(dimensions, get_output_path(self.storage))
         return self.__build_orginal_dimensions()
