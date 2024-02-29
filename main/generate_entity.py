@@ -1,12 +1,11 @@
-from llm import llm
 import os
 import logging
 from utils.util import read_json, read_file, write_json_to_file, delete_file
-from langchain_core.messages import HumanMessage, SystemMessage
-from langchain.output_parsers.json import SimpleJsonOutputParser
 from output_manage import get_output_path
 from tqdm import tqdm
 from functools import reduce
+from operator import add
+from llm import ChatModel
 
 
 def get_question_query_pair():
@@ -26,40 +25,35 @@ def get_question_query_pair():
 
 
 def generate_entity():
-    json_parser = SimpleJsonOutputParser()
-    chain = llm | json_parser
+    prompt = """
+                You are an expert in the field of data analysis, proficient in datamesh theory and SQL syntax, 
+                and know that data entities are divided according to business meanings and can be formed by joining one table or multiple tables. 
+                Next, I will give you a table schema of the data field and some sql in this data field. 
+                Please create data entities according to the table given to you, and give the business meaning of these entities, source table and table join sql.
+                Just return the json structure like the example.
 
-    messages = [
-        SystemMessage(
-            content="""
-                    You are an expert in the field of data analysis, proficient in datamesh theory and SQL syntax, 
-                    and know that data entities are divided according to business meanings and can be formed by joining one table or multiple tables. 
-                    Next, I will give you a table schema of the data field and some sql in this data field. 
-                    Please create data entities according to the table given to you, and give the business meaning of these entities, source table and table join sql.
-                    Just return the json structure like the example.
+                For example:
+                [
+                    {
+                        "entityName": "address",
+                        "businessSemantics": "Represents the different addresses where students might reside or have lived.",
+                        "sourceTable": "["Addresses"]",
+                        "joinSql": "SELECT * FROM Addresses",
+                    },
+                    {
+                        "entityName": "Student Enrolment Courses",
+                        "businessSemantics": "Links student enrollments to specific courses.",
+                        "sourceTable": "["Student_Enrolment_Courses","Courses"]",
+                        "joinSql": "SELECT * FROM Student_Enrolment_Courses JOIN Courses ON Student_Enrolment_Courses.course_id = Courses.course_id",
+                    }
+                ]
+            """
+    llm = ChatModel(prompt=prompt, is_json_output=True)
 
-                    For example:
-                    [
-                        {
-                            "entityName": "address",
-                            "businessSemantics": "Represents the different addresses where students might reside or have lived.",
-                            "sourceTable": "["Addresses"]",
-                            "joinSql": "SELECT * FROM Addresses",
-                        },
-                        {
-                            "entityName": "Student Enrolment Courses",
-                            "businessSemantics": "Links student enrollments to specific courses.",
-                            "sourceTable": "["Student_Enrolment_Courses","Courses"]",
-                            "joinSql": "SELECT * FROM Student_Enrolment_Courses JOIN Courses ON Student_Enrolment_Courses.course_id = Courses.course_id",
-                        }
-                    ]
-                """
-        ),
-    ]
     schema = read_file(os.environ["schema"])
     sql = get_question_query_pair().__str__()
-    messages.append(HumanMessage(content=f"```{schema}```\n```{sql}```"))
-    return chain.invoke(messages)
+
+    return llm.invoke(f"```{schema}```\n```{sql}```")
 
 
 def find_source_table(table_names: list[str], source_tables: list):
@@ -82,7 +76,7 @@ def parse_entity(original_entities: list):
                 entity_source_table_names, source_tables
             )
             entity["fields"] = reduce(
-                lambda x, y: x + y,
+                add,
                 [source_table["fields"] for source_table in entity_source_tables],
             )
             entities.append(entity)

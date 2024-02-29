@@ -1,38 +1,86 @@
 [
     {
         "entityName": "Address Details",
-        "businessSemantics": "Contains detailed information about various addresses including primary address lines, city, zip code, state, and country.",
+        "businessSemantics": "Represents the detailed addresses including primary address lines.",
         "sourceTable": "[\"Addresses\"]",
-        "joinSql": "SELECT * FROM Addresses"
+        "joinSql": "SELECT line_1, line_2 FROM Addresses"
     },
     {
-        "entityName": "Course Information",
-        "businessSemantics": "Holds information about courses including their names and descriptions.",
+        "entityName": "Course Catalog",
+        "businessSemantics": "Contains all the courses offered.",
         "sourceTable": "[\"Courses\"]",
-        "joinSql": "SELECT * FROM Courses"
+        "joinSql": "SELECT count(*) FROM Courses"
     },
     {
-        "entityName": "Department Offerings",
-        "businessSemantics": "Represents departments and the number of degree programs they offer.",
+        "entityName": "Math Course Description",
+        "businessSemantics": "Provides descriptions for courses named 'math'.",
+        "sourceTable": "[\"Courses\"]",
+        "joinSql": "SELECT course_description FROM Courses WHERE course_name = 'math'"
+    },
+    {
+        "entityName": "Port Chelsea Zip Code",
+        "businessSemantics": "The postal code for the city of Port Chelsea.",
+        "sourceTable": "[\"Addresses\"]",
+        "joinSql": "SELECT zip_postcode FROM Addresses WHERE city = 'Port Chelsea'"
+    },
+    {
+        "entityName": "Top Department by Degrees",
+        "businessSemantics": "The department offering the highest number of degree programs.",
+        "sourceTable": "[\"Degree_Programs\", \"Departments\"]",
+        "joinSql": "SELECT T2.department_name, T1.department_id FROM Degree_Programs AS T1 JOIN Departments AS T2 ON T1.department_id = T2.department_id GROUP BY T1.department_id ORDER BY count(*) DESC LIMIT 1"
+    },
+    {
+        "entityName": "Degree Program Diversity",
+        "businessSemantics": "Counts the distinct departments offering degree programs.",
+        "sourceTable": "[\"Degree_Programs\"]",
+        "joinSql": "SELECT count(DISTINCT department_id) FROM Degree_Programs"
+    },
+    {
+        "entityName": "Degree Program Variety",
+        "businessSemantics": "Counts the distinct names of degree programs offered.",
+        "sourceTable": "[\"Degree_Programs\"]",
+        "joinSql": "SELECT count(DISTINCT degree_summary_name) FROM Degree_Programs"
+    },
+    {
+        "entityName": "Engineering Degrees",
+        "businessSemantics": "The number of degrees offered by the Engineering department.",
         "sourceTable": "[\"Departments\", \"Degree_Programs\"]",
-        "joinSql": "SELECT Departments.department_id, Departments.department_name, COUNT(Degree_Programs.degree_program_id) AS NumberOfDegrees FROM Departments JOIN Degree_Programs ON Departments.department_id = Degree_Programs.department_id GROUP BY Departments.department_id"
-    },
-    {
-        "entityName": "Student Enrollment",
-        "businessSemantics": "Links students to their enrolled degree programs and semesters.",
-        "sourceTable": "[\"Student_Enrolment\", \"Degree_Programs\", \"Semesters\", \"Students\"]",
-        "joinSql": "SELECT Student_Enrolment.*, Degree_Programs.degree_summary_name, Semesters.semester_name, Students.first_name, Students.last_name FROM Student_Enrolment JOIN Degree_Programs ON Student_Enrolment.degree_program_id = Degree_Programs.degree_program_id JOIN Semesters ON Student_Enrolment.semester_id = Semesters.semester_id JOIN Students ON Student_Enrolment.student_id = Students.student_id"
+        "joinSql": "SELECT count(*) FROM Departments AS T1 JOIN Degree_Programs AS T2 ON T1.department_id = T2.department_id WHERE T1.department_name = 'engineer'"
     },
     {
         "entityName": "Section Details",
-        "businessSemantics": "Contains details about course sections including their names and descriptions.",
+        "businessSemantics": "Names and descriptions of all course sections.",
         "sourceTable": "[\"Sections\"]",
-        "joinSql": "SELECT * FROM Sections"
+        "joinSql": "SELECT section_name, section_description FROM Sections"
     },
     {
-        "entityName": "Transcript Information",
-        "businessSemantics": "Represents transcripts and their contents, linking them to specific course enrollments.",
-        "sourceTable": "[\"Transcripts\", \"Transcript_Contents\", \"Student_Enrolment_Courses\"]",
-        "joinSql": "SELECT Transcripts.transcript_id, Transcripts.transcript_date, Transcript_Contents.student_course_id FROM Transcripts JOIN Transcript_Contents ON Transcripts.transcript_id = Transcript_Contents.transcript_id JOIN Student_Enrolment_Courses ON Transcript_Contents.student_course_id = Student_Enrolment_Courses.student_course_id"
+        "entityName": "Courses with Limited Sections",
+        "businessSemantics": "Courses having at most 2 sections.",
+        "sourceTable": "[\"Courses\", \"Sections\"]",
+        "joinSql": "SELECT T1.course_name, T1.course_id FROM Courses AS T1 JOIN Sections AS T2 ON T1.course_id = T2.course_id GROUP BY T1.course_id HAVING count(*) <= 2"
+    },
+    {
+        "entityName": "Popular Semester",
+        "businessSemantics": "The semester with the highest number of student registrations.",
+        "sourceTable": "[\"Semesters\", \"Student_Enrolment\"]",
+        "joinSql": "SELECT T1.semester_name, T1.semester_id FROM Semesters AS T1 JOIN Student_Enrolment AS T2 ON T1.semester_id = T2.semester_id GROUP BY T1.semester_id ORDER BY count(*) DESC LIMIT 1"
+    },
+    {
+        "entityName": "Computer Science Department Description",
+        "businessSemantics": "Description of the department with 'computer' in its name.",
+        "sourceTable": "[\"Departments\"]",
+        "joinSql": "SELECT department_description FROM Departments WHERE department_name LIKE '%computer%'"
+    },
+    {
+        "entityName": "Bachelor Enrolled Students",
+        "businessSemantics": "Students enrolled in Bachelor degree programs.",
+        "sourceTable": "[\"Students\", \"Student_Enrolment\", \"Degree_Programs\"]",
+        "joinSql": "SELECT DISTINCT T1.first_name, T1.middle_name, T1.last_name FROM Students AS T1 JOIN Student_Enrolment AS T2 ON T1.student_id = T2.student_id JOIN Degree_Programs AS T3 ON T2.degree_program_id = T3.degree_program_id WHERE T3.degree_summary_name = 'Bachelor'"
+    },
+    {
+        "entityName": "Most Popular Program",
+        "businessSemantics": "The degree program with the highest number of student enrollments.",
+        "sourceTable": "[\"Degree_Programs\", \"Student_Enrolment\"]",
+        "joinSql": "SELECT T1.degree_program_id, T1.degree_summary_name FROM Degree_Programs AS T1 JOIN Student_Enrolment AS T2 ON T1.degree_program_id = T2.degree_program_id GROUP BY T1.degree_program_id ORDER BY count(*) DESC LIMIT 1"
     }
 ]
