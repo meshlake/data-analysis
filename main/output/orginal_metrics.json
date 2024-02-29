@@ -1,0 +1,489 @@
+[
+    {
+        "name": "total_courses_count",
+        "businessSemantics": "total number of courses listed",
+        "sourceTable": "Courses",
+        "aggregation": "COUNT",
+        "field": "*",
+        "dataType": "INTEGER",
+        "isValid": "True",
+        "original": {
+            "question": "How many courses in total are listed?",
+            "query": "SELECT count(*) FROM Courses"
+        }
+    },
+    {
+        "name": "total_courses_count",
+        "businessSemantics": "total number of courses",
+        "sourceTable": "Courses",
+        "aggregation": "COUNT",
+        "field": "*",
+        "dataType": "INTEGER",
+        "isValid": "True",
+        "original": {
+            "question": "How many courses are there?",
+            "query": "SELECT count(*) FROM Courses"
+        }
+    },
+    {
+        "name": "department_with_most_degrees",
+        "businessSemantics": "department offering the most number of degrees",
+        "sourceTable": [
+            "Degree_Programs",
+            "Departments"
+        ],
+        "aggregation": "COUNT",
+        "field": "*",
+        "dataType": "INT",
+        "isValid": "True",
+        "original": {
+            "question": "Which department offers the most number of degrees? List department name and id.",
+            "query": "SELECT T2.department_name ,  T1.department_id FROM Degree_Programs AS T1 JOIN Departments AS T2 ON T1.department_id  =  T2.department_id GROUP BY T1.department_id ORDER BY count(*) DESC LIMIT 1"
+        }
+    },
+    {
+        "name": "department_with_most_degrees",
+        "businessSemantics": "name and id of the department with the most number of degrees",
+        "sourceTable": [
+            "degree_programs",
+            "departments"
+        ],
+        "aggregation": "COUNT",
+        "field": "*",
+        "dataType": "INT",
+        "isValid": "True",
+        "original": {
+            "question": "What is the name and id of the department with the most number of degrees ?",
+            "query": "select t2.department_name ,  t1.department_id from degree_programs as t1 join departments as t2 on t1.department_id  =  t2.department_id group by t1.department_id order by count(*) desc limit 1"
+        }
+    },
+    {
+        "name": "total_unique_departments_offering_degrees",
+        "businessSemantics": "number of departments offering any degree",
+        "sourceTable": "Degree_Programs",
+        "aggregation": "COUNT",
+        "field": "department_id",
+        "dataType": "INTEGER",
+        "isValid": "True",
+        "original": {
+            "question": "How many departments offer any degree?",
+            "query": "SELECT count(DISTINCT department_id) FROM Degree_Programs"
+        }
+    },
+    {
+        "name": "distinct_department_count",
+        "businessSemantics": "different departments offer degrees",
+        "sourceTable": "Degree_Programs",
+        "aggregation": "COUNT",
+        "field": "department_id",
+        "dataType": "INTEGER",
+        "isValid": "True",
+        "original": {
+            "question": "How many different departments offer degrees?",
+            "query": "SELECT count(DISTINCT department_id) FROM Degree_Programs"
+        }
+    },
+    {
+        "name": "distinct_degree_names_count",
+        "businessSemantics": "different degree names offered",
+        "sourceTable": "Degree_Programs",
+        "aggregation": "COUNT",
+        "field": "degree_summary_name",
+        "dataType": "INTEGER",
+        "isValid": "True",
+        "original": {
+            "question": "How many different degree names are offered?",
+            "query": "SELECT count(DISTINCT degree_summary_name) FROM Degree_Programs"
+        }
+    },
+    {
+        "name": "total_unique_degrees_offered",
+        "businessSemantics": "different degrees are offered",
+        "sourceTable": "Degree_Programs",
+        "aggregation": "COUNT",
+        "field": "degree_summary_name",
+        "dataType": "INTEGER",
+        "isValid": "True",
+        "original": {
+            "question": "How many different degrees are offered?",
+            "query": "SELECT count(DISTINCT degree_summary_name) FROM Degree_Programs"
+        }
+    },
+    {
+        "name": "engineering_department_degrees_count",
+        "businessSemantics": "number of degrees the engineering department offers",
+        "sourceTable": [
+            "Departments",
+            "Degree_Programs"
+        ],
+        "aggregation": "COUNT",
+        "field": "*",
+        "dataType": "INTEGER",
+        "isValid": "True",
+        "original": {
+            "question": "How many degrees does the engineering department offer?",
+            "query": "SELECT count(*) FROM Departments AS T1 JOIN Degree_Programs AS T2 ON T1.department_id  =  T2.department_id WHERE T1.department_name  =  'engineer'"
+        }
+    },
+    {
+        "name": "engineering_department_degree_count",
+        "businessSemantics": "number of degrees in the engineering department",
+        "sourceTable": [
+            "Departments",
+            "Degree_Programs"
+        ],
+        "aggregation": "COUNT",
+        "field": "*",
+        "dataType": "INTEGER",
+        "isValid": "True",
+        "original": {
+            "question": "How many degrees does the engineering department have?",
+            "query": "SELECT count(*) FROM Departments AS T1 JOIN Degree_Programs AS T2 ON T1.department_id  =  T2.department_id WHERE T1.department_name  =  'engineer'"
+        }
+    },
+    {
+        "name": "most_registered_semester",
+        "businessSemantics": "semester which most student registered in",
+        "sourceTable": [
+            "Semesters",
+            "Student_Enrolment"
+        ],
+        "aggregation": "COUNT",
+        "field": "*",
+        "dataType": "INTEGER",
+        "isValid": "True",
+        "original": {
+            "question": "What is the semester which most student registered in? Show both the name and the id.",
+            "query": "SELECT T1.semester_name ,  T1.semester_id FROM Semesters AS T1 JOIN Student_Enrolment AS T2 ON T1.semester_id  =  T2.semester_id GROUP BY T1.semester_id ORDER BY count(*) DESC LIMIT 1"
+        }
+    },
+    {
+        "name": "most_enrolled_program",
+        "businessSemantics": "kind of program which most number of students are enrolled in",
+        "sourceTable": [
+            "Degree_Programs",
+            "Student_Enrolment"
+        ],
+        "aggregation": "COUNT",
+        "field": "*",
+        "groupBy": "degree_summary_name",
+        "orderBy": "DESC",
+        "limit": 1,
+        "dataType": "STRING",
+        "isValid": "True",
+        "original": {
+            "question": "Find the kind of program which most number of students are enrolled in?",
+            "query": "SELECT T1.degree_summary_name FROM Degree_Programs AS T1 JOIN Student_Enrolment AS T2 ON T1.degree_program_id  =  T2.degree_program_id GROUP BY T1.degree_summary_name ORDER BY count(*) DESC LIMIT 1"
+        }
+    },
+    {
+        "name": "most_enrolled_degree_summary_name",
+        "businessSemantics": "degree summary name that has the most number of students enrolled",
+        "sourceTable": [
+            "Degree_Programs",
+            "Student_Enrolment"
+        ],
+        "aggregation": "COUNT",
+        "field": "*",
+        "dataType": "STRING",
+        "isValid": "True",
+        "original": {
+            "question": "What is the degree summary name that has the most number of students enrolled?",
+            "query": "SELECT T1.degree_summary_name FROM Degree_Programs AS T1 JOIN Student_Enrolment AS T2 ON T1.degree_program_id  =  T2.degree_program_id GROUP BY T1.degree_summary_name ORDER BY count(*) DESC LIMIT 1"
+        }
+    },
+    {
+        "name": "most_enrolled_program",
+        "businessSemantics": "program which most number of students are enrolled in",
+        "sourceTable": [
+            "Degree_Programs",
+            "Student_Enrolment"
+        ],
+        "aggregation": "COUNT",
+        "field": "*",
+        "dataType": "INTEGER",
+        "isValid": "True",
+        "original": {
+            "question": "Find the program which most number of students are enrolled in. List both the id and the summary.",
+            "query": "SELECT T1.degree_program_id ,  T1.degree_summary_name FROM Degree_Programs AS T1 JOIN Student_Enrolment AS T2 ON T1.degree_program_id  =  T2.degree_program_id GROUP BY T1.degree_program_id ORDER BY count(*) DESC LIMIT 1"
+        }
+    },
+    {
+        "name": "student_with_most_enrollments",
+        "businessSemantics": "student who has enrolled for the most times in any program",
+        "sourceTable": [
+            "Students",
+            "Student_Enrolment"
+        ],
+        "aggregation": "COUNT",
+        "field": "*",
+        "dataType": "INT",
+        "isValid": "True",
+        "fields": [
+            {
+                "name": "student_id",
+                "sourceTable": "Students",
+                "dataType": "INT"
+            },
+            {
+                "name": "first_name",
+                "sourceTable": "Students",
+                "dataType": "VARCHAR"
+            },
+            {
+                "name": "middle_name",
+                "sourceTable": "Students",
+                "dataType": "VARCHAR"
+            },
+            {
+                "name": "last_name",
+                "sourceTable": "Students",
+                "dataType": "VARCHAR"
+            },
+            {
+                "name": "number_of_enrollments",
+                "sourceTable": "Student_Enrolment",
+                "aggregation": "COUNT",
+                "dataType": "INT"
+            },
+            {
+                "name": "student_id",
+                "sourceTable": "Students",
+                "dataType": "INT"
+            }
+        ],
+        "original": {
+            "question": "Which student has enrolled for the most times in any program? List the id, first name, middle name, last name, the number of enrollments and student id.",
+            "query": "SELECT T1.student_id ,  T1.first_name ,  T1.middle_name ,  T1.last_name ,  count(*) ,  T1.student_id FROM Students AS T1 JOIN Student_Enrolment AS T2 ON T1.student_id  =  T2.student_id GROUP BY T1.student_id ORDER BY count(*) DESC LIMIT 1"
+        }
+    },
+    {
+        "name": "student_with_most_enrollments",
+        "businessSemantics": "first, middle, and last name, along with the id and number of enrollments, for the student who enrolled the most in any program",
+        "sourceTable": [
+            "Students",
+            "Student_Enrolment"
+        ],
+        "aggregation": "COUNT",
+        "field": "*",
+        "dataType": "INTEGER",
+        "isValid": "True",
+        "original": {
+            "question": "What is the first, middle, and last name, along with the id and number of enrollments, for the student who enrolled the most in any program?",
+            "query": "SELECT T1.student_id ,  T1.first_name ,  T1.middle_name ,  T1.last_name ,  count(*) ,  T1.student_id FROM Students AS T1 JOIN Student_Enrolment AS T2 ON T1.student_id  =  T2.student_id GROUP BY T1.student_id ORDER BY count(*) DESC LIMIT 1"
+        }
+    },
+    {
+        "name": "course_with_most_enrollments",
+        "businessSemantics": "name of the course with most number of enrollments",
+        "sourceTable": [
+            "Courses",
+            "Student_Enrolment_Courses"
+        ],
+        "aggregation": "COUNT",
+        "field": "*",
+        "dataType": "STRING",
+        "isValid": "True",
+        "original": {
+            "question": "What's the name of the course with most number of enrollments?",
+            "query": "SELECT  T1.course_name FROM Courses AS T1 JOIN Student_Enrolment_Courses AS T2 ON T1.course_id  =  T2.course_id GROUP BY T1.course_name ORDER BY count(*) DESC LIMIT 1"
+        }
+    },
+    {
+        "name": "course_with_most_students",
+        "businessSemantics": "name of the course with the most students enrolled",
+        "sourceTable": [
+            "Courses",
+            "Student_Enrolment_Courses"
+        ],
+        "aggregation": "COUNT",
+        "field": "*",
+        "dataType": "STRING",
+        "isValid": "True",
+        "original": {
+            "question": "What is the name of the course with the most students enrolled?",
+            "query": "SELECT  T1.course_name FROM Courses AS T1 JOIN Student_Enrolment_Courses AS T2 ON T1.course_id  =  T2.course_id GROUP BY T1.course_name ORDER BY count(*) DESC LIMIT 1"
+        }
+    },
+    {
+        "name": "timmothy_ward_phone_number",
+        "businessSemantics": "phone number of the man with the first name Timmothy and the last name Ward",
+        "sourceTable": "Students",
+        "condition": "first_name = 'Timmothy' AND last_name = 'Ward'",
+        "field": "cell_mobile_number",
+        "dataType": "STRING",
+        "isValid": "True",
+        "original": {
+            "question": "What is the phone number of the man with the first name Timmothy and the last name Ward?",
+            "query": "SELECT cell_mobile_number FROM Students WHERE first_name = 'Timmothy' AND last_name = 'Ward'"
+        }
+    },
+    {
+        "name": "average_transcript_print_date",
+        "businessSemantics": "average date when the transcripts were printed",
+        "sourceTable": "Transcripts",
+        "aggregation": "AVG",
+        "field": "transcript_date",
+        "dataType": "DATE",
+        "isValid": "True",
+        "original": {
+            "question": "On average, when were the transcripts printed?",
+            "query": "SELECT avg(transcript_date) FROM Transcripts"
+        }
+    },
+    {
+        "name": "average_transcript_date",
+        "businessSemantics": "average transcript date",
+        "sourceTable": "Transcripts",
+        "aggregation": "AVG",
+        "field": "transcript_date",
+        "dataType": "DATE",
+        "isValid": "True",
+        "original": {
+            "question": "What is the average transcript date?",
+            "query": "SELECT avg(transcript_date) FROM Transcripts"
+        }
+    },
+    {
+        "name": "total_transcripts_released",
+        "businessSemantics": "number of transcripts released",
+        "sourceTable": "Transcripts",
+        "aggregation": "COUNT",
+        "field": "*",
+        "dataType": "INTEGER",
+        "isValid": "True",
+        "original": {
+            "question": "How many transcripts are released?",
+            "query": "SELECT count(*) FROM Transcripts"
+        }
+    },
+    {
+        "name": "total_transcripts_count",
+        "businessSemantics": "number of transcripts listed",
+        "sourceTable": "Transcripts",
+        "aggregation": "COUNT",
+        "field": "*",
+        "dataType": "INTEGER",
+        "isValid": "True",
+        "original": {
+            "question": "How many transcripts are listed?",
+            "query": "SELECT count(*) FROM Transcripts"
+        }
+    },
+    {
+        "name": "last_transcript_release_date",
+        "businessSemantics": "last transcript release date",
+        "sourceTable": "Transcripts",
+        "aggregation": "MAX",
+        "field": "transcript_date",
+        "dataType": "DATE",
+        "isValid": "True",
+        "original": {
+            "question": "What is the last transcript release date?",
+            "query": "SELECT transcript_date FROM Transcripts ORDER BY transcript_date DESC LIMIT 1"
+        }
+    },
+    {
+        "name": "last_transcript_release_date",
+        "businessSemantics": "last transcript release date",
+        "sourceTable": "Transcripts",
+        "aggregation": "MAX",
+        "field": "transcript_date",
+        "dataType": "DATE",
+        "isValid": "True",
+        "original": {
+            "question": "When was the last transcript released?",
+            "query": "SELECT transcript_date FROM Transcripts ORDER BY transcript_date DESC LIMIT 1"
+        }
+    },
+    {
+        "name": "maximum_course_enrollment_occurrences",
+        "businessSemantics": "maximum times a course enrollment can show in different transcripts",
+        "sourceTable": "Transcript_Contents",
+        "aggregation": "COUNT",
+        "field": "student_course_id",
+        "dataType": "INT",
+        "isValid": "True",
+        "additionalFields": [
+            {
+                "name": "student_course_id",
+                "dataType": "INT"
+            }
+        ],
+        "original": {
+            "question": "How many times at most can a course enrollment result show in different transcripts? Also show the course enrollment id.",
+            "query": "SELECT count(*) ,  student_course_id FROM Transcript_Contents GROUP BY student_course_id ORDER BY count(*) DESC LIMIT 1"
+        }
+    },
+    {
+        "name": "maximum_course_frequency",
+        "businessSemantics": "maximum number of times that a course shows up in different transcripts and that course's enrollment id",
+        "sourceTable": "Transcript_Contents",
+        "aggregation": "COUNT",
+        "field": "student_course_id",
+        "dataType": "INTEGER",
+        "isValid": "True",
+        "original": {
+            "question": "What is the maximum number of times that a course shows up in different transcripts and what is that course's enrollment id?",
+            "query": "SELECT count(*) ,  student_course_id FROM Transcript_Contents GROUP BY student_course_id ORDER BY count(*) DESC LIMIT 1"
+        }
+    },
+    {
+        "name": "transcript_date_least_results",
+        "businessSemantics": "date of the transcript which shows the least number of results, also list the id",
+        "sourceTable": [
+            "Transcript_Contents",
+            "Transcripts"
+        ],
+        "aggregation": "COUNT",
+        "field": "*",
+        "dataType": "DATE, INT",
+        "isValid": "True",
+        "original": {
+            "question": "Show the date of the transcript which shows the least number of results, also list the id.",
+            "query": "SELECT T2.transcript_date ,  T1.transcript_id FROM Transcript_Contents AS T1 JOIN Transcripts AS T2 ON T1.transcript_id  =  T2.transcript_id GROUP BY T1.transcript_id ORDER BY count(*) ASC LIMIT 1"
+        }
+    },
+    {
+        "name": "transcript_with_least_results",
+        "businessSemantics": "date and id of the transcript with the least number of results",
+        "sourceTable": [
+            "Transcript_Contents",
+            "Transcripts"
+        ],
+        "aggregation": "COUNT",
+        "field": "*",
+        "dataType": "INT",
+        "isValid": "True",
+        "original": {
+            "question": "What is the date and id of the transcript with the least number of results?",
+            "query": "SELECT T2.transcript_date ,  T1.transcript_id FROM Transcript_Contents AS T1 JOIN Transcripts AS T2 ON T1.transcript_id  =  T2.transcript_id GROUP BY T1.transcript_id ORDER BY count(*) ASC LIMIT 1"
+        }
+    },
+    {
+        "name": "unique_student_addresses_count",
+        "businessSemantics": "different addresses the students currently live",
+        "sourceTable": "Students",
+        "aggregation": "COUNT",
+        "field": "current_address_id",
+        "dataType": "INT",
+        "isValid": "True",
+        "original": {
+            "question": "How many different addresses do the students currently live?",
+            "query": "SELECT count(DISTINCT current_address_id) FROM Students"
+        }
+    },
+    {
+        "name": "unique_student_addresses_count",
+        "businessSemantics": "different addresses that have students living there",
+        "sourceTable": "Students",
+        "aggregation": "COUNT",
+        "field": "current_address_id",
+        "dataType": "INTEGER",
+        "isValid": "True",
+        "original": {
+            "question": "What are the different addresses that have students living there?",
+            "query": "SELECT count(DISTINCT current_address_id) FROM Students"
+        }
+    }
+]
