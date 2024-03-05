@@ -4,7 +4,6 @@
         "businessSemantics": "zip code of the address in the city",
         "sourceTable": "Addresses",
         "field": "city",
-        "dataType": "String",
         "isValid": "True",
         "original": {
             "question": "What is the zip code of the address in the city Port Chelsea?",

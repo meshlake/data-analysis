@@ -16,32 +16,35 @@ class Dimension:
     def __init__(self):
         prompt = """
                 You are a data analysis expert who is proficient in SQL. 
+
+                A "dimension" usually refers to a specific aspect of data that is used to classify, group, or describe the data. 
+                It can be viewed as an attribute of the data, such as time, location, product type, etc. 
+                Dimensions are often used in data warehouses and data cubes to help analysts perform multi-dimensional analysis of data to better understand the characteristics and trends of the data.
+
                 Please find the dimension definition from the sql given to you and return the json structure in the sample.
                 If the query does not contain a valid dimension, return {"isValid": "False"}.
 
                 For example:
                 input: 
                 ```
-                question: "What is the average score of every course?"
-                query: "SELECT AVG(score) FROM student_scores GROUP BY course_id"
+                query: "SELECT order_date, COUNT(*) AS order_count FROM orders GROUP BY order_date"
                 ```
 
                 output:
                 ```
                 {
-                    "name": "student_course",
-                    "businessSemantics": "average score of the course",
-                    "sourceTable": ["student_scores"],
-                    "field": "course_id",
-                    "dataType": "String",
+                    "name": "date",
+                    "businessSemantics": "date",
+                    "sourceTable": ["orders"],
+                    "field": "order_date",
+                    "dataType": "DATE",
                     "isValid": "True",
                     "original": {
-                        "question": "What is the average score of every course?"
-                        "query": "SELECT AVG(score) FROM student_scores GROUP BY course_id"
+                        "question": ""
+                        "query": "SELECT order_date, COUNT(*) AS order_count FROM orders GROUP BY order_date"
                     }
                 }
                 ```
-
 
                 input: 
                 ```
@@ -105,4 +108,5 @@ class Dimension:
 
         delete_file(get_output_path(self.storage))
         write_json_to_file(dimensions, get_output_path(self.storage))
-        return self.__build_orginal_dimensions()
+        
+        return dimensions

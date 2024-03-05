@@ -16,7 +16,7 @@
     },
     {
         "name": "total_courses_count",
-        "businessSemantics": "total number of courses",
+        "businessSemantics": "number of courses",
         "sourceTable": [
             "Courses"
         ],
@@ -31,14 +31,14 @@
     },
     {
         "name": "department_with_most_degrees",
-        "businessSemantics": "department offering the most number of degrees",
+        "businessSemantics": "department offers the most number of degrees",
         "sourceTable": [
             "Degree_Programs",
             "Departments"
         ],
         "aggregation": "COUNT",
         "field": "*",
-        "dataType": "INTEGER",
+        "dataType": "INT",
         "isValid": "True",
         "original": {
             "question": "Which department offers the most number of degrees? List department name and id.",
@@ -54,7 +54,7 @@
         ],
         "aggregation": "COUNT",
         "field": "*",
-        "dataType": "INT",
+        "dataType": "INTEGER",
         "isValid": "True",
         "original": {
             "question": "What is the name and id of the department with the most number of degrees ?",
@@ -62,7 +62,7 @@
         }
     },
     {
-        "name": "count_departments_offering_degrees",
+        "name": "total_departments_offering_degrees",
         "businessSemantics": "number of departments offering any degree",
         "sourceTable": [
             "Degree_Programs"
@@ -77,14 +77,14 @@
         }
     },
     {
-        "name": "unique_department_count",
-        "businessSemantics": "number of different departments offering degrees",
+        "name": "unique_departments_offering_degrees",
+        "businessSemantics": "different departments offer degrees",
         "sourceTable": [
             "Degree_Programs"
         ],
         "aggregation": "COUNT",
         "field": "department_id",
-        "dataType": "INTEGER",
+        "dataType": "INT",
         "isValid": "True",
         "original": {
             "question": "How many different departments offer degrees?",
@@ -99,7 +99,7 @@
         ],
         "aggregation": "COUNT",
         "field": "degree_summary_name",
-        "dataType": "INTEGER",
+        "dataType": "INT",
         "isValid": "True",
         "original": {
             "question": "How many different degree names are offered?",
@@ -178,7 +178,7 @@
         ],
         "aggregation": "COUNT",
         "field": "*",
-        "dataType": "INT",
+        "dataType": "INTEGER",
         "isValid": "True",
         "original": {
             "question": "Find the kind of program which most number of students are enrolled in?",
@@ -210,7 +210,7 @@
         ],
         "aggregation": "COUNT",
         "field": "*",
-        "dataType": "INTEGER",
+        "dataType": "INT",
         "isValid": "True",
         "original": {
             "question": "Find the program which most number of students are enrolled in. List both the id and the summary.",
@@ -234,7 +234,7 @@
         }
     },
     {
-        "name": "top_enrolled_student_details",
+        "name": "student_with_most_enrollments",
         "businessSemantics": "first, middle, and last name, along with the id and number of enrollments, for the student who enrolled the most in any program",
         "sourceTable": [
             "Students",
@@ -242,7 +242,7 @@
         ],
         "aggregation": "COUNT",
         "field": "*",
-        "dataType": "INT",
+        "dataType": "INTEGER",
         "isValid": "True",
         "original": {
             "question": "What is the first, middle, and last name, along with the id and number of enrollments, for the student who enrolled the most in any program?",
@@ -282,23 +282,8 @@
         }
     },
     {
-        "name": "timmothy_ward_phone_number",
-        "businessSemantics": "phone number of the man with the first name Timmothy and the last name Ward",
-        "sourceTable": [
-            "Students"
-        ],
-        "condition": "first_name = 'Timmothy' AND last_name = 'Ward'",
-        "field": "cell_mobile_number",
-        "dataType": "STRING",
-        "isValid": "True",
-        "original": {
-            "question": "What is the phone number of the man with the first name Timmothy and the last name Ward?",
-            "query": "SELECT cell_mobile_number FROM Students WHERE first_name  =  'Timmothy' AND last_name  =  'Ward'"
-        }
-    },
-    {
         "name": "address_with_most_students",
-        "businessSemantics": "address holding the most number of students currently",
+        "businessSemantics": "address holds the most number of students currently",
         "sourceTable": [
             "Addresses",
             "Students"
@@ -324,6 +309,21 @@
         "isValid": "True",
         "original": {
             "question": "On average, when were the transcripts printed?",
+            "query": "SELECT avg(transcript_date) FROM Transcripts"
+        }
+    },
+    {
+        "name": "average_transcript_date",
+        "businessSemantics": "average transcript date",
+        "sourceTable": [
+            "Transcripts"
+        ],
+        "aggregation": "AVG",
+        "field": "transcript_date",
+        "dataType": "DATE",
+        "isValid": "True",
+        "original": {
+            "question": "What is the average transcript date?",
             "query": "SELECT avg(transcript_date) FROM Transcripts"
         }
     },
@@ -388,8 +388,8 @@
         }
     },
     {
-        "name": "maximum_course_enrollment_appearances",
-        "businessSemantics": "maximum times a course enrollment can appear in different transcripts, along with the course enrollment id",
+        "name": "max_course_enrollment_appearances",
+        "businessSemantics": "maximum times a course enrollment can appear in different transcripts",
         "sourceTable": [
             "Transcript_Contents"
         ],
@@ -418,8 +418,8 @@
         }
     },
     {
-        "name": "transcript_least_results_date_and_id",
-        "businessSemantics": "date of the transcript which shows the least number of results and its id",
+        "name": "date_and_id_of_least_results_transcript",
+        "businessSemantics": "date of the transcript which shows the least number of results, also list the id",
         "sourceTable": [
             "Transcript_Contents",
             "Transcripts"
@@ -442,7 +442,7 @@
         ],
         "aggregation": "COUNT",
         "field": "*",
-        "dataType": "INTEGER",
+        "dataType": "INT",
         "isValid": "True",
         "original": {
             "question": "What is the date and id of the transcript with the least number of results?",
@@ -451,13 +451,13 @@
     },
     {
         "name": "distinct_student_addresses_count",
-        "businessSemantics": "different addresses where students currently live",
+        "businessSemantics": "different addresses the students currently live",
         "sourceTable": [
             "Students"
         ],
         "aggregation": "COUNT",
         "field": "current_address_id",
-        "dataType": "INTEGER",
+        "dataType": "INT",
         "isValid": "True",
         "original": {
             "question": "How many different addresses do the students currently live?",
@@ -472,7 +472,7 @@
         ],
         "aggregation": "COUNT",
         "field": "current_address_id",
-        "dataType": "INT",
+        "dataType": "INTEGER",
         "isValid": "True",
         "original": {
             "question": "What are the different addresses that have students living there?",

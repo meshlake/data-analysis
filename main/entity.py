@@ -62,7 +62,7 @@ class Entity:
 
     def __build_original_entities(self):
         logging.info("start to build original entities...")
-        
+
         (filter_sql, schema) = self.__load_requirements()
 
         sql = filter_sql.__str__()
@@ -100,7 +100,12 @@ class Entity:
             write_json_to_file(entities, entity_file)
 
     @classmethod
-    def search(cls, source_tables: list = []):
+    def search_by_natural_language(cls, query: str = []):
+        entities = read_json(get_output_path(cls.storage))
+        return []
+
+    @classmethod
+    def search_by_source_tables(cls, source_tables: list = []):
         entities = read_json(get_output_path(cls.storage))
         return [
             entity

@@ -1,0 +1,17 @@
+[
+    {
+        "name": "department",
+        "businessSemantics": "department",
+        "sourceTable": [
+            "Degree_Programs",
+            "Departments"
+        ],
+        "field": "department_id",
+        "dataType": "UNKNOWN",
+        "isValid": "True",
+        "original": {
+            "question": "Which department offers the most number of degrees? List department name and id.",
+            "query": "SELECT T2.department_name ,  T1.department_id FROM Degree_Programs AS T1 JOIN Departments AS T2 ON T1.department_id  =  T2.department_id GROUP BY T1.department_id ORDER BY count(*) DESC LIMIT 1"
+        }
+    }
+]
