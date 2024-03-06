@@ -1,18 +1,22 @@
 import logging
 import os
 from llm import ChatModel
-from output_manage import get_output_path
+from output_manage import get_output_path, get_vector_store_path
 from utils.util import read_json, write_json_to_file, delete_file
 from tqdm import tqdm
 from langchain_core.exceptions import OutputParserException
 from entity import Entity
+from langchain_community.document_loaders import JSONLoader
+from langchain_openai import OpenAIEmbeddings
+from langchain_community.vectorstores import Chroma
 
 
 class Metrics:
 
     orginal_storage = "orginal_metrics.json"
     storage = "metrics.json"
-
+    vector_store_path = get_vector_store_path()
+    
     def __init__(self):
         prompt = """
                 You are a data analysis expert who is proficient in SQL. 
@@ -208,6 +212,7 @@ class Metrics:
             )
 
             metric["entities"] = [entity["name"] for entity in llm_selected_entity]
+            metric["category"] = "METRIC"
 
             return metric
 
@@ -217,3 +222,38 @@ class Metrics:
         write_json_to_file(metrics, get_output_path(self.storage))
 
         return metrics
+
+    def build_vector_store(self, force=False):
+
+        if not force and os.path.exists(get_output_path(self.storage)):
+            loader = JSONLoader(
+                file_path=get_output_path(self.storage),
+                jq_schema=".[]",
+                text_content=False,
+            )
+            metrics = loader.load()
+
+            def add_metadata(metric):
+                metric.metadata["category"] = "METRIC"
+                return metric
+
+            metrics = [add_metadata(metric) for metric in metrics]
+        else:
+            logging.warning("metrics not found, skip building vector store")
+
+        Chroma.from_documents(
+            metrics,
+            OpenAIEmbeddings(),
+            persist_directory=self.vector_store_path,
+            collection_name="metrics",
+        )
+
+    @classmethod
+    def search_by_natural_language(cls, query: str = ""):
+        vector_store = Chroma(
+            persist_directory=cls.vector_store_path,
+            embedding_function=OpenAIEmbeddings(),
+            collection_name="metrics",
+        )
+        docs = vector_store.similarity_search(query)
+        return docs

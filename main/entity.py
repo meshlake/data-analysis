@@ -1,17 +1,21 @@
 import os
 import logging
 from utils.util import read_json, read_file, write_json_to_file, delete_file
-from output_manage import get_output_path
+from output_manage import get_output_path, get_vector_store_path
 from tqdm import tqdm
 from functools import reduce
 from operator import add
 from llm import ChatModel
+from langchain_community.document_loaders import JSONLoader
+from langchain_openai import OpenAIEmbeddings
+from langchain_community.vectorstores import Chroma
 
 
 class Entity:
 
     original_storage = "orginal_entities.json"
     storage = "entities.json"
+    vector_store_path = get_vector_store_path()
 
     def __init__(self):
         prompt = """
@@ -93,16 +97,47 @@ class Entity:
                     add,
                     [source_table["fields"] for source_table in entity_source_tables],
                 )
+                entity["category"] = "ENTITY"
                 entities.append(entity)
             write_json_to_file(entities, entity_file)
         except Exception as e:
             logging.error(f"build entity failed: {e}")
             write_json_to_file(entities, entity_file)
 
+    def build_vector_store(self, force=False):
+
+        if not force and os.path.exists(get_output_path(self.storage)):
+            loader = JSONLoader(
+                file_path=get_output_path(self.storage),
+                jq_schema=".[]",
+                text_content=False,
+            )
+            entities = loader.load()
+
+            def add_metadata(entity):
+                entity.metadata["category"] = "ENTITY"
+                return entity
+
+            entities = [add_metadata(entity) for entity in entities]
+        else:
+            logging.warning("entities not found, skip building vector store")
+
+        Chroma.from_documents(
+            entities,
+            OpenAIEmbeddings(),
+            persist_directory=self.vector_store_path,
+            collection_name="entities",
+        )
+
     @classmethod
-    def search_by_natural_language(cls, query: str = []):
-        entities = read_json(get_output_path(cls.storage))
-        return []
+    def search_by_natural_language(cls, query: str = ""):
+        vector_store = Chroma(
+            persist_directory=cls.vector_store_path,
+            embedding_function=OpenAIEmbeddings(),
+            collection_name="entities",
+        )
+        docs = vector_store.similarity_search(query)
+        return docs
 
     @classmethod
     def search_by_source_tables(cls, source_tables: list = []):

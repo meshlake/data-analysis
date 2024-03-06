@@ -102,11 +102,12 @@ class Dimension:
             associated_entities = Entity.search(dimension["sourceTable"])
             del dimension["isValid"]
             dimension["entities"] = [entity["name"] for entity in associated_entities]
+            dimension["category"] = "DIMENSION"
             return dimension
 
         dimensions = [associate_entities(dimension) for dimension in orginal_dimensions]
 
         delete_file(get_output_path(self.storage))
         write_json_to_file(dimensions, get_output_path(self.storage))
-        
+
         return dimensions
