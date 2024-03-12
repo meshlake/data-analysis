@@ -9,7 +9,7 @@ load_dotenv()
 class ChatModel:
     def __init__(
         self,
-        model: str = "gpt-4-turbo-preview",
+        model: str = "gpt-4-0125-preview",
         prompt: str = "You are a helpful assistant",
         is_json_output: bool = False,
     ):

@@ -2,6 +2,7 @@ from langchain_community.vectorstores import Chroma
 from llm import ChatModel
 from output_manage import get_vector_store_path
 from langchain_openai import OpenAIEmbeddings
+import json
 
 
 class SqlEngine:
@@ -12,12 +13,20 @@ class SqlEngine:
         prompt = """
             You are an expert in data analysis and SQL syntax, and are good at datamesh theory.
             I'll give you some structure for business entities, metrics, and dimensions.
+            
+            Rule: 
+            1.The field of groupby should be appropriately selected according to the problem, usually an identifier or a unique column
+
             Please follow the steps below to generate sql statements based on the user's questions and these structural information.
             Step 1: Understand the user’s problem
             Step 2: Understand the structural information given to you
-            Step 3: Generate sql
-            Step 4: Return the question and sql in the sample json format
+            Step 3: Generate sql that conforms to the rules
+            Step 4: Check the SQL syntax and whether it violates the rules. 
+                    If the syntax is incorrect or the rules are violated, go back to step 3.
+            Step 5: Return the question and sql in the sample json format
 
+            
+            
             For example:
             input:
             ```
@@ -109,9 +118,37 @@ class SqlEngine:
         )
 
     def invoke(self, question: str):
+        # TODO: parse question and extract entities and metrics
+
         entities = self.entity_searcher.similarity_search(query=question)
         metrics = self.metric_searcher.similarity_search(query=question)
 
         return self.llm.invoke(
             f"```question:{question}\nentity:{entities}\nmetric:{metrics}```"
         )
+
+    def invoke_without_original(self, question: str):
+        # TODO: parse question and extract entities and metrics
+
+        entities = self.entity_searcher.similarity_search(query=question)
+        metrics = self.metric_searcher.similarity_search(query=question)
+
+        def delete_original(metric):
+            new_metric = json.loads(metric.page_content)
+            del new_metric["original"]
+            return new_metric
+
+        metrics = [delete_original(metric) for metric in metrics]
+
+        return self.llm.invoke(
+            f"```question:{question}\nentity:{entities}\nmetric:{metrics}```"
+        )
+
+    def get_context(self, question: str):
+        entities = self.entity_searcher.similarity_search(query=question)
+        metrics = self.metric_searcher.similarity_search(query=question)
+
+        return {
+            "entities": entities,
+            "metrics": metrics,
+        }

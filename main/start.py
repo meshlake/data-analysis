@@ -1,7 +1,7 @@
+import sys
 from dataset import set_dataset
 from utils.init_logging import init_logging_config
 from sql_engine import SqlEngine
-from utils.util import read_json, write_json_to_file
 
 if __name__ == "__main__":
     # 初始化日志配置
@@ -12,10 +12,11 @@ if __name__ == "__main__":
 
     sql_engine = SqlEngine()
 
-    questions = read_json("question/student.json")
-    res = []
-    for question in questions:
-        sql = sql_engine.invoke(question)
-        res.append(sql)
+    for line in sys.stdin:
+        question = line.strip()
+        if "q" == question:
+            break
+        # The LLM takes a prompt as an input and outputs a completion
+        answer = sql_engine.invoke(question)
 
-    write_json_to_file(res, "question/student_res.json")
+        print(answer)
