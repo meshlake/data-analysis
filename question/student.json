@@ -1,0 +1,12 @@
+[
+    "Calculate the average number of courses offered per department. Include departments that offer at least one course.",
+    "What is the total number of students enrolled across all semesters, and how does this number change from the earliest to the latest semester?",
+    "Identify the course with the highest number of enrollments and provide the semester in which this peak enrollment occurred.",
+    "For each department, calculate the percentage of students enrolled in its degree programs compared to the total student enrollment across all departments.",
+    "Determine the semester with the highest average number of courses taken by students. Provide the semester name and the average course count.",
+    "What is the total number of distinct addresses from which students have registered, and how does this number vary by semester?",
+    "Find the department that has seen the greatest increase in the number of degrees offered from the earliest to the latest semester in the dataset.",
+    "Calculate the average duration (in semesters) it takes for a student to complete their degree program, based on the available enrollment data.",
+    "Identify the course that appears most frequently on transcripts and provide the average grade for this course across all transcripts.",
+    "For each degree program, calculate the ratio of the number of students who have completed the program (as evidenced by transcript data) to the number of students who have enrolled in the program."
+]

@@ -1,0 +1,72 @@
+[
+    {
+        "question": "Calculate the average number of courses offered per department. Include departments that offer at least one course.",
+        "sql": {
+            "question": "Calculate the average number of courses offered per department. Include departments that offer at least one course.",
+            "query": "SELECT AVG(course_count) FROM (SELECT Departments.department_id, COUNT(Degree_Programs.degree_program_id) AS course_count FROM Departments JOIN Degree_Programs ON Departments.department_id = Degree_Programs.department_id GROUP BY Departments.department_id) AS department_course_counts"
+        }
+    },
+    {
+        "question": "What is the total number of students enrolled across all semesters, and how does this number change from the earliest to the latest semester?",
+        "sql": {
+            "question": "What is the total number of students enrolled across all semesters, and how does this number change from the earliest to the latest semester?",
+            "query": "WITH SemesterEnrollments AS (SELECT Semesters.semester_id, Semesters.semester_name, COUNT(DISTINCT Student_Enrolment.student_id) AS total_students FROM Student_Enrolment JOIN Semesters ON Student_Enrolment.semester_id = Semesters.semester_id GROUP BY Semesters.semester_id, Semesters.semester_name), TotalEnrollment AS (SELECT SUM(total_students) AS total_enrollment FROM SemesterEnrollments), EarliestSemester AS (SELECT semester_name, total_students FROM SemesterEnrollments ORDER BY semester_id ASC LIMIT 1), LatestSemester AS (SELECT semester_name, total_students FROM SemesterEnrollments ORDER BY semester_id DESC LIMIT 1) SELECT TotalEnrollment.total_enrollment, EarliestSemester.semester_name AS earliest_semester_name, EarliestSemester.total_students AS earliest_semester_students, LatestSemester.semester_name AS latest_semester_name, LatestSemester.total_students AS latest_semester_students FROM TotalEnrollment, EarliestSemester, LatestSemester"
+        }
+    },
+    {
+        "question": "Identify the course with the highest number of enrollments and provide the semester in which this peak enrollment occurred.",
+        "sql": {
+            "question": "Identify the course with the highest number of enrollments and provide the semester in which this peak enrollment occurred.",
+            "query": "SELECT Courses.course_name, Semesters.semester_name, COUNT(Student_Enrolment_Courses.student_course_id) AS enrollment_count FROM Student_Enrolment_Courses JOIN Courses ON Student_Enrolment_Courses.course_id = Courses.course_id JOIN Semesters ON Student_Enrolment_Courses.semester_id = Semesters.semester_id GROUP BY Courses.course_name, Semesters.semester_name ORDER BY enrollment_count DESC LIMIT 1"
+        }
+    },
+    {
+        "question": "For each department, calculate the percentage of students enrolled in its degree programs compared to the total student enrollment across all departments.",
+        "sql": {
+            "question": "For each department, calculate the percentage of students enrolled in its degree programs compared to the total student enrollment across all departments.",
+            "query": "SELECT D.department_name, (SUM(DP.students_enrolled) / (SELECT SUM(students_enrolled) FROM Degree_Programs) * 100) AS enrollment_percentage FROM Departments D JOIN Degree_Programs DP ON D.department_id = DP.department_id GROUP BY D.department_name"
+        }
+    },
+    {
+        "question": "Determine the semester with the highest average number of courses taken by students. Provide the semester name and the average course count.",
+        "sql": {
+            "question": "Determine the semester with the highest average number of courses taken by students. Provide the semester name and the average course count.",
+            "query": "SELECT S.semester_name, AVG(T.course_count) AS average_course_count FROM (SELECT SEC.semester_id, COUNT(SEC.course_id) AS course_count FROM Student_Enrolment_Courses SEC GROUP BY SEC.student_enrolment_id, SEC.semester_id) AS T JOIN Semesters S ON T.semester_id = S.semester_id GROUP BY S.semester_id ORDER BY average_course_count DESC LIMIT 1"
+        }
+    },
+    {
+        "question": "What is the total number of distinct addresses from which students have registered, and how does this number vary by semester?",
+        "sql": {
+            "question": "What is the total number of distinct addresses from which students have registered, and how does this number vary by semester?",
+            "query": "SELECT YEAR(date_first_registered) AS semester, COUNT(DISTINCT current_address_id) + COUNT(DISTINCT permanent_address_id) - COUNT(DISTINCT current_address_id, permanent_address_id) AS total_distinct_addresses FROM Students GROUP BY YEAR(date_first_registered)"
+        }
+    },
+    {
+        "question": "Find the department that has seen the greatest increase in the number of degrees offered from the earliest to the latest semester in the dataset.",
+        "sql": {
+            "question": "Find the department that has seen the greatest increase in the number of degrees offered from the earliest to the latest semester in the dataset.",
+            "query": "WITH DegreeCounts AS (SELECT department_id, COUNT(degree_program_id) AS degree_count, MIN(semester) AS first_semester, MAX(semester) AS last_semester FROM Degree_Programs GROUP BY department_id), DegreeDifferences AS (SELECT D1.department_id, (D2.degree_count - D1.degree_count) AS degree_diff FROM DegreeCounts D1 JOIN DegreeCounts D2 ON D1.department_id = D2.department_id AND D1.first_semester < D2.last_semester) SELECT Departments.department_name, MAX(DegreeDifferences.degree_diff) AS max_increase FROM DegreeDifferences JOIN Departments ON DegreeDifferences.department_id = Departments.department_id GROUP BY Departments.department_name ORDER BY max_increase DESC LIMIT 1"
+        }
+    },
+    {
+        "question": "Calculate the average duration (in semesters) it takes for a student to complete their degree program, based on the available enrollment data.",
+        "sql": {
+            "question": "Calculate the average duration (in semesters) it takes for a student to complete their degree program, based on the available enrollment data.",
+            "query": "SELECT AVG(semester_count) FROM (SELECT student_id, COUNT(DISTINCT semester_id) AS semester_count FROM Student_Enrolment GROUP BY student_id) AS temp"
+        }
+    },
+    {
+        "question": "Identify the course that appears most frequently on transcripts and provide the average grade for this course across all transcripts.",
+        "sql": {
+            "question": "Identify the course that appears most frequently on transcripts and provide the average grade for this course across all transcripts.",
+            "query": "WITH CourseFrequency AS (SELECT course_id, COUNT(*) AS frequency FROM Transcript_Contents JOIN Transcripts ON Transcript_Contents.transcript_id = Transcripts.transcript_id JOIN Student_Enrolment_Courses ON Transcript_Contents.student_course_id = Student_Enrolment_Courses.student_course_id GROUP BY course_id ORDER BY COUNT(*) DESC LIMIT 1), AvgGrade AS (SELECT Student_Enrolment_Courses.course_id, AVG(Transcript_Contents.grade) AS average_grade FROM Transcript_Contents JOIN Transcripts ON Transcript_Contents.transcript_id = Transcripts.transcript_id JOIN Student_Enrolment_Courses ON Transcript_Contents.student_course_id = Student_Enrolment_Courses.student_course_id WHERE Student_Enrolment_Courses.course_id IN (SELECT course_id FROM CourseFrequency) GROUP BY Student_Enrolment_Courses.course_id) SELECT CourseFrequency.course_id, AvgGrade.average_grade FROM CourseFrequency JOIN AvgGrade ON CourseFrequency.course_id = AvgGrade.course_id"
+        }
+    },
+    {
+        "question": "For each degree program, calculate the ratio of the number of students who have completed the program (as evidenced by transcript data) to the number of students who have enrolled in the program.",
+        "sql": {
+            "question": "For each degree program, calculate the ratio of the number of students who have completed the program (as evidenced by transcript data) to the number of students who have enrolled in the program.",
+            "query": "WITH Completed AS (SELECT Student_Enrolment.degree_program_id, COUNT(DISTINCT Transcripts.student_id) AS completed_students FROM Transcripts JOIN Transcript_Contents ON Transcripts.transcript_id = Transcript_Contents.transcript_id JOIN Student_Enrolment_Courses ON Transcript_Contents.student_course_id = Student_Enrolment_Courses.student_course_id JOIN Student_Enrolment ON Student_Enrolment_Courses.student_enrolment_id = Student_Enrolment.student_enrolment_id GROUP BY Student_Enrolment.degree_program_id), Enrolled AS (SELECT degree_program_id, COUNT(DISTINCT student_id) AS enrolled_students FROM Student_Enrolment GROUP BY degree_program_id) SELECT Enrolled.degree_program_id, CASE WHEN Enrolled.enrolled_students = 0 THEN 0 ELSE CAST(Completed.completed_students AS FLOAT) / Enrolled.enrolled_students END AS completion_ratio FROM Enrolled LEFT JOIN Completed ON Enrolled.degree_program_id = Completed.degree_program_id"
+        }
+    }
+]

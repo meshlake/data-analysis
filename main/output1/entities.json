@@ -1,0 +1,808 @@
+[
+    {
+        "name": "Breeds",
+        "businessSemantics": "Represents different dog breeds.",
+        "sourceTable": [
+            "Breeds"
+        ],
+        "joinSql": "SELECT * FROM Breeds",
+        "fields": [
+            {
+                "name": "breed_code",
+                "description": "breed code",
+                "dataType": "VARCHAR(10)",
+                "nullable": "False",
+                "primaryKey": "True",
+                "foreignKey": "False"
+            },
+            {
+                "name": "breed_name",
+                "description": "breed name",
+                "type": "VARCHAR(80)",
+                "nullable": "False",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            }
+        ],
+        "category": "ENTITY"
+    },
+    {
+        "name": "Charges",
+        "businessSemantics": "Represents various charges applicable, such as for accommodation, drugs, and health checks.",
+        "sourceTable": [
+            "Charges"
+        ],
+        "joinSql": "SELECT * FROM Charges",
+        "fields": [
+            {
+                "name": "charge_id",
+                "description": "charge id",
+                "dataType": "INTEGER",
+                "nullable": "False",
+                "primaryKey": "True",
+                "foreignKey": "False"
+            },
+            {
+                "name": "charge_type",
+                "description": "charge type",
+                "type": "VARCHAR(10)",
+                "nullable": "False",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "charge_amount",
+                "description": "charge amount",
+                "type": "DECIMAL(19,4)",
+                "nullable": "False",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            }
+        ],
+        "category": "ENTITY"
+    },
+    {
+        "name": "Sizes",
+        "businessSemantics": "Represents the size categories for dogs, such as Small, Medium, and Large.",
+        "sourceTable": [
+            "Sizes"
+        ],
+        "joinSql": "SELECT * FROM Sizes",
+        "fields": [
+            {
+                "name": "size_code",
+                "description": "size code",
+                "dataType": "VARCHAR(10)",
+                "nullable": "False",
+                "primaryKey": "True",
+                "foreignKey": "False"
+            },
+            {
+                "name": "size_description",
+                "description": "size description",
+                "type": "VARCHAR(80)",
+                "nullable": "True",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            }
+        ],
+        "category": "ENTITY"
+    },
+    {
+        "name": "Treatment Types",
+        "businessSemantics": "Represents the types of treatments available, such as Physical examination, Vaccination, and Walking.",
+        "sourceTable": [
+            "Treatment_Types"
+        ],
+        "joinSql": "SELECT * FROM Treatment_Types",
+        "fields": [
+            {
+                "name": "treatment_type_code",
+                "description": "treatment type code",
+                "dataType": "VARCHAR(10)",
+                "nullable": "False",
+                "primaryKey": "True",
+                "foreignKey": "False"
+            },
+            {
+                "name": "treatment_type_description",
+                "description": "treatment type description",
+                "type": "VARCHAR(80)",
+                "nullable": "False",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            }
+        ],
+        "category": "ENTITY"
+    },
+    {
+        "name": "Owners",
+        "businessSemantics": "Represents dog owners, including their contact information.",
+        "sourceTable": [
+            "Owners"
+        ],
+        "joinSql": "SELECT * FROM Owners",
+        "fields": [
+            {
+                "name": "owner_id",
+                "description": "owner id",
+                "dataType": "INTEGER",
+                "nullable": "False",
+                "primaryKey": "True",
+                "foreignKey": "False"
+            },
+            {
+                "name": "first_name",
+                "description": "first name",
+                "type": "VARCHAR(50)",
+                "nullable": "False",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "last_name",
+                "description": "last name",
+                "type": "VARCHAR(50)",
+                "nullable": "False",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "street",
+                "description": "street",
+                "type": "VARCHAR(50)",
+                "nullable": "False",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "city",
+                "description": "city",
+                "type": "VARCHAR(50)",
+                "nullable": "False",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "state",
+                "description": "state",
+                "type": "VARCHAR(20)",
+                "nullable": "False",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "zip_code",
+                "description": "zip code",
+                "type": "VARCHAR(20)",
+                "nullable": "False",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "email_address",
+                "description": "email address",
+                "type": "VARCHAR(50)",
+                "nullable": "False",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "home_phone",
+                "description": "home phone",
+                "type": "VARCHAR(20)",
+                "nullable": "True",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "cell_number",
+                "description": "cell number",
+                "type": "VARCHAR(20)",
+                "nullable": "True",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            }
+        ],
+        "category": "ENTITY"
+    },
+    {
+        "name": "Dogs",
+        "businessSemantics": "Represents dogs, including details such as breed, size, name, age, and ownership.",
+        "sourceTable": [
+            "Dogs",
+            "Breeds",
+            "Sizes",
+            "Owners"
+        ],
+        "joinSql": "SELECT Dogs.*, Breeds.breed_name, Sizes.size_description, Owners.first_name, Owners.last_name FROM Dogs JOIN Breeds ON Dogs.breed_code = Breeds.breed_code JOIN Sizes ON Dogs.size_code = Sizes.size_code JOIN Owners ON Dogs.owner_id = Owners.owner_id",
+        "fields": [
+            {
+                "name": "breed_code",
+                "description": "breed code",
+                "dataType": "VARCHAR(10)",
+                "nullable": "False",
+                "primaryKey": "True",
+                "foreignKey": "False"
+            },
+            {
+                "name": "breed_name",
+                "description": "breed name",
+                "type": "VARCHAR(80)",
+                "nullable": "False",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "size_code",
+                "description": "size code",
+                "dataType": "VARCHAR(10)",
+                "nullable": "False",
+                "primaryKey": "True",
+                "foreignKey": "False"
+            },
+            {
+                "name": "size_description",
+                "description": "size description",
+                "type": "VARCHAR(80)",
+                "nullable": "True",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "owner_id",
+                "description": "owner id",
+                "dataType": "INTEGER",
+                "nullable": "False",
+                "primaryKey": "True",
+                "foreignKey": "False"
+            },
+            {
+                "name": "first_name",
+                "description": "first name",
+                "type": "VARCHAR(50)",
+                "nullable": "False",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "last_name",
+                "description": "last name",
+                "type": "VARCHAR(50)",
+                "nullable": "False",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "street",
+                "description": "street",
+                "type": "VARCHAR(50)",
+                "nullable": "False",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "city",
+                "description": "city",
+                "type": "VARCHAR(50)",
+                "nullable": "False",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "state",
+                "description": "state",
+                "type": "VARCHAR(20)",
+                "nullable": "False",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "zip_code",
+                "description": "zip code",
+                "type": "VARCHAR(20)",
+                "nullable": "False",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "email_address",
+                "description": "email address",
+                "type": "VARCHAR(50)",
+                "nullable": "False",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "home_phone",
+                "description": "home phone",
+                "type": "VARCHAR(20)",
+                "nullable": "True",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "cell_number",
+                "description": "cell number",
+                "type": "VARCHAR(20)",
+                "nullable": "True",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "dog_id",
+                "description": "dog id",
+                "dataType": "INTEGER",
+                "nullable": "False",
+                "primaryKey": "True",
+                "foreignKey": "False"
+            },
+            {
+                "name": "owner_id",
+                "description": "owner id",
+                "dataType": "INTEGER",
+                "nullable": "False",
+                "primaryKey": "False",
+                "foreignKey": "True"
+            },
+            {
+                "name": "abandoned_yn",
+                "description": "abandoned yes/no",
+                "dataType": "VARCHAR(1)",
+                "nullable": "True",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "breed_code",
+                "description": "breed code",
+                "dataType": "VARCHAR(10)",
+                "nullable": "False",
+                "primaryKey": "False",
+                "foreignKey": "True"
+            },
+            {
+                "name": "size_code",
+                "description": "size code",
+                "dataType": "VARCHAR(10)",
+                "nullable": "False",
+                "primaryKey": "False",
+                "foreignKey": "True"
+            },
+            {
+                "name": "name",
+                "description": "dog's name",
+                "dataType": "VARCHAR(50)",
+                "nullable": "True",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "age",
+                "description": "dog's age",
+                "dataType": "VARCHAR(20)",
+                "nullable": "True",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "date_of_birth",
+                "description": "date of birth",
+                "dataType": "DATETIME",
+                "nullable": "True",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "gender",
+                "description": "gender",
+                "dataType": "VARCHAR(1)",
+                "nullable": "True",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "weight",
+                "description": "weight",
+                "dataType": "VARCHAR(20)",
+                "nullable": "True",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "date_arrived",
+                "description": "date arrived",
+                "dataType": "DATETIME",
+                "nullable": "True",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "date_adopted",
+                "description": "date adopted",
+                "dataType": "DATETIME",
+                "nullable": "True",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "date_departed",
+                "description": "date departed",
+                "dataType": "DATETIME",
+                "nullable": "True",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            }
+        ],
+        "category": "ENTITY"
+    },
+    {
+        "name": "Professionals",
+        "businessSemantics": "Represents professionals, including their roles and contact information.",
+        "sourceTable": [
+            "Professionals"
+        ],
+        "joinSql": "SELECT * FROM Professionals",
+        "fields": [
+            {
+                "name": "professional_id",
+                "description": "professional id",
+                "dataType": "INTEGER",
+                "nullable": "False",
+                "primaryKey": "True",
+                "foreignKey": "False"
+            },
+            {
+                "name": "role_code",
+                "description": "role code",
+                "type": "VARCHAR(10)",
+                "nullable": "False",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "first_name",
+                "description": "first name",
+                "type": "VARCHAR(50)",
+                "nullable": "True",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "street",
+                "description": "street",
+                "type": "VARCHAR(50)",
+                "nullable": "True",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "city",
+                "description": "city",
+                "type": "VARCHAR(50)",
+                "nullable": "True",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "state",
+                "description": "state",
+                "type": "VARCHAR(20)",
+                "nullable": "True",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "zip_code",
+                "description": "zip code",
+                "type": "VARCHAR(20)",
+                "nullable": "True",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "last_name",
+                "description": "last name",
+                "type": "VARCHAR(50)",
+                "nullable": "True",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "email_address",
+                "description": "email address",
+                "type": "VARCHAR(50)",
+                "nullable": "True",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "home_phone",
+                "description": "home phone",
+                "type": "VARCHAR(20)",
+                "nullable": "True",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "cell_number",
+                "description": "cell number",
+                "type": "VARCHAR(20)",
+                "nullable": "True",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            }
+        ],
+        "category": "ENTITY"
+    },
+    {
+        "name": "Treatments",
+        "businessSemantics": "Represents treatments performed on dogs, including the type of treatment, the professional who performed it, and the cost.",
+        "sourceTable": [
+            "Treatments",
+            "Dogs",
+            "Professionals",
+            "Treatment_Types"
+        ],
+        "joinSql": "SELECT Treatments.*, Dogs.name AS dog_name, Professionals.first_name AS professional_first_name, Treatment_Types.treatment_type_description FROM Treatments JOIN Dogs ON Treatments.dog_id = Dogs.dog_id JOIN Professionals ON Treatments.professional_id = Professionals.professional_id JOIN Treatment_Types ON Treatments.treatment_type_code = Treatment_Types.treatment_type_code",
+        "fields": [
+            {
+                "name": "treatment_type_code",
+                "description": "treatment type code",
+                "dataType": "VARCHAR(10)",
+                "nullable": "False",
+                "primaryKey": "True",
+                "foreignKey": "False"
+            },
+            {
+                "name": "treatment_type_description",
+                "description": "treatment type description",
+                "type": "VARCHAR(80)",
+                "nullable": "False",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "dog_id",
+                "description": "dog id",
+                "dataType": "INTEGER",
+                "nullable": "False",
+                "primaryKey": "True",
+                "foreignKey": "False"
+            },
+            {
+                "name": "owner_id",
+                "description": "owner id",
+                "dataType": "INTEGER",
+                "nullable": "False",
+                "primaryKey": "False",
+                "foreignKey": "True"
+            },
+            {
+                "name": "abandoned_yn",
+                "description": "abandoned yes/no",
+                "dataType": "VARCHAR(1)",
+                "nullable": "True",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "breed_code",
+                "description": "breed code",
+                "dataType": "VARCHAR(10)",
+                "nullable": "False",
+                "primaryKey": "False",
+                "foreignKey": "True"
+            },
+            {
+                "name": "size_code",
+                "description": "size code",
+                "dataType": "VARCHAR(10)",
+                "nullable": "False",
+                "primaryKey": "False",
+                "foreignKey": "True"
+            },
+            {
+                "name": "name",
+                "description": "dog's name",
+                "dataType": "VARCHAR(50)",
+                "nullable": "True",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "age",
+                "description": "dog's age",
+                "dataType": "VARCHAR(20)",
+                "nullable": "True",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "date_of_birth",
+                "description": "date of birth",
+                "dataType": "DATETIME",
+                "nullable": "True",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "gender",
+                "description": "gender",
+                "dataType": "VARCHAR(1)",
+                "nullable": "True",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "weight",
+                "description": "weight",
+                "dataType": "VARCHAR(20)",
+                "nullable": "True",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "date_arrived",
+                "description": "date arrived",
+                "dataType": "DATETIME",
+                "nullable": "True",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "date_adopted",
+                "description": "date adopted",
+                "dataType": "DATETIME",
+                "nullable": "True",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "date_departed",
+                "description": "date departed",
+                "dataType": "DATETIME",
+                "nullable": "True",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "professional_id",
+                "description": "professional id",
+                "dataType": "INTEGER",
+                "nullable": "False",
+                "primaryKey": "True",
+                "foreignKey": "False"
+            },
+            {
+                "name": "role_code",
+                "description": "role code",
+                "type": "VARCHAR(10)",
+                "nullable": "False",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "first_name",
+                "description": "first name",
+                "type": "VARCHAR(50)",
+                "nullable": "True",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "street",
+                "description": "street",
+                "type": "VARCHAR(50)",
+                "nullable": "True",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "city",
+                "description": "city",
+                "type": "VARCHAR(50)",
+                "nullable": "True",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "state",
+                "description": "state",
+                "type": "VARCHAR(20)",
+                "nullable": "True",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "zip_code",
+                "description": "zip code",
+                "type": "VARCHAR(20)",
+                "nullable": "True",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "last_name",
+                "description": "last name",
+                "type": "VARCHAR(50)",
+                "nullable": "True",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "email_address",
+                "description": "email address",
+                "type": "VARCHAR(50)",
+                "nullable": "True",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "home_phone",
+                "description": "home phone",
+                "type": "VARCHAR(20)",
+                "nullable": "True",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "cell_number",
+                "description": "cell number",
+                "type": "VARCHAR(20)",
+                "nullable": "True",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "treatment_id",
+                "description": "treatment id",
+                "dataType": "INTEGER",
+                "nullable": "False",
+                "primaryKey": "True",
+                "foreignKey": "False"
+            },
+            {
+                "name": "dog_id",
+                "description": "dog id",
+                "dataType": "INTEGER",
+                "nullable": "False",
+                "primaryKey": "False",
+                "foreignKey": "True"
+            },
+            {
+                "name": "professional_id",
+                "description": "professional id",
+                "dataType": "INTEGER",
+                "nullable": "False",
+                "primaryKey": "False",
+                "foreignKey": "True"
+            },
+            {
+                "name": "treatment_type_code",
+                "description": "treatment type code",
+                "dataType": "VARCHAR(10)",
+                "nullable": "False",
+                "primaryKey": "False",
+                "foreignKey": "True"
+            },
+            {
+                "name": "date_of_treatment",
+                "description": "date of treatment",
+                "dataType": "DATETIME",
+                "nullable": "True",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            },
+            {
+                "name": "cost_of_treatment",
+                "description": "cost of treatment",
+                "dataType": "DECIMAL(19,4)",
+                "nullable": "True",
+                "primaryKey": "False",
+                "foreignKey": "False"
+            }
+        ],
+        "category": "ENTITY"
+    }
+]

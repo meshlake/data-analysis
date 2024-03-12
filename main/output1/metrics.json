@@ -1,0 +1,539 @@
+[
+    {
+        "name": "average_age_treated_dogs",
+        "businessSemantics": "average age of the dogs who have gone through any treatments",
+        "sourceTable": [
+            "Dogs",
+            "Treatments"
+        ],
+        "aggregation": "AVG",
+        "field": "age",
+        "dataType": "FLOAT",
+        "original": {
+            "question": "What is the average age of the dogs who have gone through any treatments?",
+            "query": "SELECT avg(age) FROM Dogs WHERE dog_id IN ( SELECT dog_id FROM Treatments )"
+        },
+        "entities": [
+            "Dogs",
+            "Treatments"
+        ],
+        "category": "METRIC"
+    },
+    {
+        "name": "average_age_of_treated_dogs",
+        "businessSemantics": "average age of the dogs who went through treatments",
+        "sourceTable": [
+            "Dogs",
+            "Treatments"
+        ],
+        "aggregation": "AVG",
+        "field": "age",
+        "dataType": "FLOAT",
+        "original": {
+            "question": "Find the average age of the dogs who went through treatments.",
+            "query": "SELECT avg(age) FROM Dogs WHERE dog_id IN ( SELECT dog_id FROM Treatments )"
+        },
+        "entities": [
+            "Dogs",
+            "Treatments"
+        ],
+        "category": "METRIC"
+    },
+    {
+        "name": "most_common_dog_breed",
+        "businessSemantics": "name of the breed with the most dogs",
+        "sourceTable": [
+            "Breeds",
+            "Dogs"
+        ],
+        "aggregation": "COUNT",
+        "field": "*",
+        "dataType": "INTEGER",
+        "original": {
+            "question": "What is the name of the breed with the most dogs?",
+            "query": "SELECT T1.breed_name FROM Breeds AS T1 JOIN Dogs AS T2 ON T1.breed_code  =  T2.breed_code GROUP BY T1.breed_name ORDER BY count(*) DESC LIMIT 1"
+        },
+        "entities": [
+            "Breeds",
+            "Dogs"
+        ],
+        "category": "METRIC"
+    },
+    {
+        "name": "most_common_dog_breed",
+        "businessSemantics": "breed name of the most common dog breed",
+        "sourceTable": [
+            "Breeds",
+            "Dogs"
+        ],
+        "aggregation": "COUNT",
+        "field": "*",
+        "dataType": "TEXT",
+        "original": {
+            "question": "Which breed do the most dogs have? Give me the breed name.",
+            "query": "SELECT T1.breed_name FROM Breeds AS T1 JOIN Dogs AS T2 ON T1.breed_code  =  T2.breed_code GROUP BY T1.breed_name ORDER BY count(*) DESC LIMIT 1"
+        },
+        "entities": [
+            "Breeds",
+            "Dogs"
+        ],
+        "category": "METRIC"
+    },
+    {
+        "name": "owner_with_most_treatments",
+        "businessSemantics": "owner who has paid for the most treatments on his or her dogs",
+        "sourceTable": [
+            "Owners",
+            "Dogs",
+            "Treatments"
+        ],
+        "aggregation": "COUNT",
+        "field": "*",
+        "dataType": "INTEGER",
+        "original": {
+            "question": "Which owner has paid for the most treatments on his or her dogs? List the owner id and last name.",
+            "query": "SELECT T1.owner_id ,  T1.last_name FROM Owners AS T1 JOIN Dogs AS T2 ON T1.owner_id  =  T2.owner_id JOIN Treatments AS T3 ON T2.dog_id  =  T3.dog_id GROUP BY T1.owner_id ORDER BY count(*) DESC LIMIT 1"
+        },
+        "entities": [
+            "Owners",
+            "Dogs",
+            "Treatments"
+        ],
+        "category": "METRIC"
+    },
+    {
+        "name": "least_expensive_treatment_type_description",
+        "businessSemantics": "description of the treatment type that costs the least money in total",
+        "sourceTable": [
+            "Treatment_types",
+            "Treatments"
+        ],
+        "aggregation": "SUM",
+        "field": "cost_of_treatment",
+        "dataType": "FLOAT",
+        "original": {
+            "question": "What is the description of the treatment type that costs the least money in total?",
+            "query": "SELECT T1.treatment_type_description FROM Treatment_types AS T1 JOIN Treatments AS T2 ON T1.treatment_type_code  =  T2.treatment_type_code GROUP BY T1.treatment_type_code ORDER BY sum(cost_of_treatment) ASC LIMIT 1"
+        },
+        "entities": [
+            "Treatments"
+        ],
+        "category": "METRIC"
+    },
+    {
+        "name": "lowest_cost_treatment_type_description",
+        "businessSemantics": "description of the treatment type whose total cost is the lowest",
+        "sourceTable": [
+            "Treatment_types",
+            "Treatments"
+        ],
+        "aggregation": "SUM",
+        "field": "cost_of_treatment",
+        "dataType": "FLOAT",
+        "original": {
+            "question": "Give me the description of the treatment type whose total cost is the lowest.",
+            "query": "SELECT T1.treatment_type_description FROM Treatment_types AS T1 JOIN Treatments AS T2 ON T1.treatment_type_code  =  T2.treatment_type_code GROUP BY T1.treatment_type_code ORDER BY sum(cost_of_treatment) ASC LIMIT 1"
+        },
+        "entities": [
+            "Treatments"
+        ],
+        "category": "METRIC"
+    },
+    {
+        "name": "owner_highest_total_payment",
+        "businessSemantics": "owner who has paid the largest amount of money in total for their dogs",
+        "sourceTable": [
+            "Owners",
+            "Dogs",
+            "Treatments"
+        ],
+        "aggregation": "SUM",
+        "field": "cost_of_treatment",
+        "dataType": "FLOAT",
+        "original": {
+            "question": "Which owner has paid the largest amount of money in total for their dogs? Show the owner id and zip code.",
+            "query": "SELECT T1.owner_id ,  T1.zip_code FROM Owners AS T1 JOIN Dogs AS T2 ON T1.owner_id  =  T2.owner_id JOIN Treatments AS T3 ON T2.dog_id  =  T3.dog_id GROUP BY T1.owner_id ORDER BY sum(T3.cost_of_treatment) DESC LIMIT 1"
+        },
+        "entities": [
+            "Owners",
+            "Dogs",
+            "Treatments"
+        ],
+        "category": "METRIC"
+    },
+    {
+        "name": "owner_highest_spending_on_dogs",
+        "businessSemantics": "owner id and zip code of the owner who spent the most money in total for his or her dogs",
+        "sourceTable": [
+            "Owners",
+            "Dogs",
+            "Treatments"
+        ],
+        "aggregation": "SUM",
+        "field": "cost_of_treatment",
+        "dataType": "FLOAT",
+        "original": {
+            "question": "Find the owner id and zip code of the owner who spent the most money in total for his or her dogs.",
+            "query": "SELECT T1.owner_id ,  T1.zip_code FROM Owners AS T1 JOIN Dogs AS T2 ON T1.owner_id  =  T2.owner_id JOIN Treatments AS T3 ON T2.dog_id  =  T3.dog_id GROUP BY T1.owner_id ORDER BY sum(T3.cost_of_treatment) DESC LIMIT 1"
+        },
+        "entities": [
+            "Owners",
+            "Dogs",
+            "Treatments"
+        ],
+        "category": "METRIC"
+    },
+    {
+        "name": "unique_dogs_treated_count",
+        "businessSemantics": "How many dogs went through any treatments?",
+        "sourceTable": [
+            "Treatments"
+        ],
+        "aggregation": "COUNT",
+        "field": "dog_id",
+        "dataType": "INT",
+        "original": {
+            "question": "How many dogs went through any treatments?",
+            "query": "SELECT count(DISTINCT dog_id) FROM Treatments"
+        },
+        "entities": [
+            "Treatments"
+        ],
+        "category": "METRIC"
+    },
+    {
+        "name": "unique_dog_treatment_count",
+        "businessSemantics": "number of dogs that went through a treatment",
+        "sourceTable": [
+            "Treatments"
+        ],
+        "aggregation": "COUNT",
+        "field": "dog_id",
+        "dataType": "INT",
+        "original": {
+            "question": "Count the number of dogs that went through a treatment.",
+            "query": "SELECT count(DISTINCT dog_id) FROM Treatments"
+        },
+        "entities": [
+            "Treatments"
+        ],
+        "category": "METRIC"
+    },
+    {
+        "name": "total_professionals_treating_dogs",
+        "businessSemantics": "number of professionals who have performed any treatment to dogs",
+        "sourceTable": [
+            "Treatments"
+        ],
+        "aggregation": "COUNT",
+        "field": "professional_id",
+        "dataType": "INTEGER",
+        "original": {
+            "question": "How many professionals have performed any treatment to dogs?",
+            "query": "SELECT count(DISTINCT professional_id) FROM Treatments"
+        },
+        "entities": [
+            "Treatments"
+        ],
+        "category": "METRIC"
+    },
+    {
+        "name": "number_of_professionals_treated_dogs",
+        "businessSemantics": "number of professionals who have ever treated dogs",
+        "sourceTable": [
+            "Treatments"
+        ],
+        "aggregation": "COUNT",
+        "field": "professional_id",
+        "dataType": "INT",
+        "original": {
+            "question": "Find the number of professionals who have ever treated dogs.",
+            "query": "SELECT count(DISTINCT professional_id) FROM Treatments"
+        },
+        "entities": [
+            "Treatments"
+        ],
+        "category": "METRIC"
+    },
+    {
+        "name": "count_dogs_below_average_age",
+        "businessSemantics": "How many dogs have an age below the average?",
+        "sourceTable": [
+            "Dogs"
+        ],
+        "aggregation": "COUNT",
+        "field": "*",
+        "condition": "age < (SELECT AVG(age) FROM Dogs)",
+        "dataType": "INTEGER",
+        "original": {
+            "question": "How many dogs have an age below the average?",
+            "query": "SELECT count(*) FROM Dogs WHERE age  <  ( SELECT avg(age) FROM Dogs )"
+        },
+        "entities": [
+            "Dogs"
+        ],
+        "category": "METRIC"
+    },
+    {
+        "name": "count_dogs_below_average_age",
+        "businessSemantics": "number of dogs of an age below the average",
+        "sourceTable": [
+            "Dogs"
+        ],
+        "aggregation": "COUNT",
+        "field": "*",
+        "condition": "age < (SELECT AVG(age) FROM Dogs)",
+        "dataType": "INTEGER",
+        "original": {
+            "question": "Count the number of dogs of an age below the average.",
+            "query": "SELECT count(*) FROM Dogs WHERE age  <  ( SELECT avg(age) FROM Dogs )"
+        },
+        "entities": [
+            "Dogs"
+        ],
+        "category": "METRIC"
+    },
+    {
+        "name": "most_recent_treatment_cost",
+        "businessSemantics": "cost of the most recently performed treatment",
+        "sourceTable": [
+            "Treatments"
+        ],
+        "aggregation": "None",
+        "field": "cost_of_treatment",
+        "dataType": "FLOAT",
+        "original": {
+            "question": "Show me the cost of the most recently performed treatment.",
+            "query": "SELECT cost_of_treatment FROM Treatments ORDER BY date_of_treatment DESC LIMIT 1"
+        },
+        "entities": [
+            "Treatments"
+        ],
+        "category": "METRIC"
+    },
+    {
+        "name": "untreated_dogs_count",
+        "businessSemantics": "number of dogs that have not gone through any treatment",
+        "sourceTable": [
+            "Dogs",
+            "Treatments"
+        ],
+        "aggregation": "COUNT",
+        "field": "*",
+        "dataType": "INTEGER",
+        "original": {
+            "question": "How many dogs have not gone through any treatment?",
+            "query": "SELECT count(*) FROM Dogs WHERE dog_id NOT IN ( SELECT dog_id FROM Treatments )"
+        },
+        "entities": [
+            "Dogs",
+            "Treatments"
+        ],
+        "category": "METRIC"
+    },
+    {
+        "name": "untreated_dogs_count",
+        "businessSemantics": "number of dogs that have not received any treatment",
+        "sourceTable": [
+            "dogs",
+            "treatments"
+        ],
+        "aggregation": "COUNT",
+        "field": "*",
+        "dataType": "INTEGER",
+        "original": {
+            "question": "Tell me the number of dogs that have not received any treatment .",
+            "query": "select count(*) from dogs where dog_id not in ( select dog_id from treatments )"
+        },
+        "entities": [],
+        "category": "METRIC"
+    },
+    {
+        "name": "owners_without_dogs_count",
+        "businessSemantics": "number of owners temporarily do not have any dogs",
+        "sourceTable": [
+            "Owners",
+            "Dogs"
+        ],
+        "aggregation": "COUNT",
+        "field": "*",
+        "dataType": "INTEGER",
+        "original": {
+            "question": "How many owners temporarily do not have any dogs?",
+            "query": "SELECT count(*) FROM Owners WHERE owner_id NOT IN ( SELECT owner_id FROM Dogs )"
+        },
+        "entities": [
+            "Owners",
+            "Dogs"
+        ],
+        "category": "METRIC"
+    },
+    {
+        "name": "number_of_owners_without_dogs",
+        "businessSemantics": "number of owners who do not own any dogs at this moment",
+        "sourceTable": [
+            "Owners",
+            "Dogs"
+        ],
+        "aggregation": "COUNT",
+        "field": "*",
+        "dataType": "INTEGER",
+        "original": {
+            "question": "Find the number of owners who do not own any dogs at this moment.",
+            "query": "SELECT count(*) FROM Owners WHERE owner_id NOT IN ( SELECT owner_id FROM Dogs )"
+        },
+        "entities": [
+            "Owners",
+            "Dogs"
+        ],
+        "category": "METRIC"
+    },
+    {
+        "name": "count_of_professionals_not_operating_on_dogs",
+        "businessSemantics": "How many professionals did not operate any treatment on dogs?",
+        "sourceTable": [
+            "Professionals",
+            "Treatments"
+        ],
+        "aggregation": "COUNT",
+        "field": "*",
+        "dataType": "INTEGER",
+        "original": {
+            "question": "How many professionals did not operate any treatment on dogs?",
+            "query": "SELECT count(*) FROM Professionals WHERE professional_id NOT IN ( SELECT professional_id FROM Treatments )"
+        },
+        "entities": [
+            "Professionals",
+            "Treatments"
+        ],
+        "category": "METRIC"
+    },
+    {
+        "name": "untreated_dogs_count",
+        "businessSemantics": "number of professionals who have not treated any dogs",
+        "sourceTable": [
+            "Professionals",
+            "Treatments"
+        ],
+        "aggregation": "COUNT",
+        "field": "*",
+        "dataType": "INTEGER",
+        "original": {
+            "question": "Find the number of professionals who have not treated any dogs.",
+            "query": "SELECT count(*) FROM Professionals WHERE professional_id NOT IN ( SELECT professional_id FROM Treatments )"
+        },
+        "entities": [
+            "Professionals",
+            "Treatments"
+        ],
+        "category": "METRIC"
+    },
+    {
+        "name": "average_dog_age",
+        "businessSemantics": "average age of all the dogs",
+        "sourceTable": [
+            "Dogs"
+        ],
+        "aggregation": "AVG",
+        "field": "age",
+        "dataType": "FLOAT",
+        "original": {
+            "question": "What is the average age of all the dogs?",
+            "query": "SELECT avg(age) FROM Dogs"
+        },
+        "entities": [
+            "Dogs"
+        ],
+        "category": "METRIC"
+    },
+    {
+        "name": "average_dog_age",
+        "businessSemantics": "average age of all the dogs",
+        "sourceTable": [
+            "Dogs"
+        ],
+        "aggregation": "AVG",
+        "field": "age",
+        "dataType": "FLOAT",
+        "original": {
+            "question": "Compute the average age of all the dogs.",
+            "query": "SELECT avg(age) FROM Dogs"
+        },
+        "entities": [
+            "Dogs"
+        ],
+        "category": "METRIC"
+    },
+    {
+        "name": "oldest_dog_age",
+        "businessSemantics": "age of the oldest dog",
+        "sourceTable": [
+            "Dogs"
+        ],
+        "aggregation": "MAX",
+        "field": "age",
+        "dataType": "INT",
+        "original": {
+            "question": "What is the age of the oldest dog?",
+            "query": "SELECT max(age) FROM Dogs"
+        },
+        "entities": [
+            "Dogs"
+        ],
+        "category": "METRIC"
+    },
+    {
+        "name": "oldest_dog_age",
+        "businessSemantics": "age of the oldest dog",
+        "sourceTable": [
+            "Dogs"
+        ],
+        "aggregation": "MAX",
+        "field": "age",
+        "dataType": "INT",
+        "original": {
+            "question": "Tell me the age of the oldest dog.",
+            "query": "SELECT max(age) FROM Dogs"
+        },
+        "entities": [
+            "Dogs"
+        ],
+        "category": "METRIC"
+    },
+    {
+        "name": "most_expensive_charge",
+        "businessSemantics": "most expensive charge type costs",
+        "sourceTable": [
+            "Charges"
+        ],
+        "aggregation": "MAX",
+        "field": "charge_amount",
+        "dataType": "FLOAT",
+        "original": {
+            "question": "How much does the most expensive charge type costs?",
+            "query": "SELECT max(charge_amount) FROM Charges"
+        },
+        "entities": [
+            "Charges"
+        ],
+        "category": "METRIC"
+    },
+    {
+        "name": "most_expensive_charge_amount",
+        "businessSemantics": "charge amount of the most expensive charge type",
+        "sourceTable": [
+            "Charges"
+        ],
+        "aggregation": "MAX",
+        "field": "charge_amount",
+        "dataType": "FLOAT",
+        "original": {
+            "question": "What is the charge amount of the most expensive charge type?",
+            "query": "SELECT max(charge_amount) FROM Charges"
+        },
+        "entities": [
+            "Charges"
+        ],
+        "category": "METRIC"
+    }
+]
