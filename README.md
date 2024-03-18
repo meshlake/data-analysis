@@ -28,32 +28,35 @@ pip3 install -r requirements.txt
 
 ## Prepare data
 
-1. Environment variable configuration
-   Create a new .env file, refer to .env.example
+1. Environment variable configuration  
+   Create a new .env file, refer to .env.example  
    Configure OPENAI_API_KEY
 
-2. Prepare data
-   Create schema.sql in the /data/default directory
-   schema.sql is the table structure of the database
+2. Prepare data  
+   Create schema.sql in the /data/default directory  
+   schema.sql is the table structure of the database  
 
-   For example
-   CREATE TABLE `Breeds` (
-   `breed_code` VARCHAR(10) PRIMARY KEY ,
-   `breed_name` VARCHAR(80)
-   );
-   CREATE TABLE `Charges` (
-   `charge_id` INTEGER PRIMARY KEY ,
-   `charge_type` VARCHAR(10),
-   `charge_amount` DECIMAL(19,4)
+   For example  
+
+   CREATE TABLE Breeds (  
+   breed_code VARCHAR(10) PRIMARY KEY ,  
+   breed_name VARCHAR(80)  
+   );  
+
+   CREATE TABLE Charges (  
+   charge_id INTEGER PRIMARY KEY ,  
+   charge_type VARCHAR(10),  
+   charge_amount DECIMAL(19,4)  
    );
 
-   Create sql.json in the /data/default directory
+   Create sql.json in the /data/default directory  
    sql.json is a combination of questions and sql to assist data analysis
 
-   For example
-   [{
-   "query": "SELECT state FROM Owners INTERSECT SELECT state FROM Professionals",
-   "question": "Which states have both owners and professionals living there?",
+   For example  
+
+   [{  
+   "query": "SELECT state FROM Owners INTERSECT SELECT state FROM Professionals",  
+   "question": "Which states have both owners and professionals living there?",  
    }]
 
    Please generate according to the sample structure
