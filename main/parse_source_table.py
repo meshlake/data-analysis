@@ -92,5 +92,8 @@ def generate_source_table_structure():
         print(f"Error: {e}")
 
 
-def main():
-    generate_source_table_structure()
+def main(force=False):
+    if not force and os.path.exists(get_output_path("source_table.json")):
+        logging.info("Source table already exists, skip building")
+    else:
+        generate_source_table_structure()

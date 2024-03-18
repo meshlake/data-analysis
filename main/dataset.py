@@ -1,7 +1,7 @@
 import os
 import logging
 
-DEFAULT_DATASET = "student_transcripts_tracking"
+DEFAULT_DATASET = "default"
 # 获取当前文件的目录
 current_dir = os.path.dirname(__file__)
 

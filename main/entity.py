@@ -81,8 +81,13 @@ class Entity:
 
         return original_entities
 
-    def build_entities(self):
-        original_entities = self.__build_original_entities()
+    def build_entities(self, force=False):
+        if not force and os.path.exists(get_output_path(self.original_storage)):
+            logging.info("Orginal metrics already exists, skip building")
+            original_entities = read_json(get_output_path(self.original_storage))
+        else:
+            original_entities = self.__build_original_entities()
+        
         source_tables = read_json(get_output_path("source_table.json"))
         entity_file = get_output_path(self.storage)
         delete_file(entity_file)

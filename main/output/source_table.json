@@ -1,11 +1,7 @@
 [
     {
         "name": "Courses",
-        "businessSemantics": "Represents all the courses available for enrollment, including their names, descriptions, and other relevant details.",
-        "sourceTable": [
-            "Courses"
-        ],
-        "joinSql": "SELECT * FROM Courses",
+        "businessSemantics": "course information",
         "fields": [
             {
                 "name": "course_id",
@@ -39,7 +35,6 @@
                 "primaryKey": "False",
                 "foreignKey": "False"
             }
-        ],
-        "category": "ENTITY"
+        ]
     }
 ]

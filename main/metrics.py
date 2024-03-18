@@ -16,7 +16,7 @@ class Metrics:
     orginal_storage = "orginal_metrics.json"
     storage = "metrics.json"
     vector_store_path = get_vector_store_path()
-    
+
     def __init__(self):
         prompt = """
                 You are a data analysis expert who is proficient in SQL. 
@@ -239,8 +239,13 @@ class Metrics:
 
             metrics = [add_metadata(metric) for metric in metrics]
         else:
+
             logging.warning("metrics not found, skip building vector store")
 
+        if not metrics or len(metrics) == 0:
+            logging.warning("No metrics found, skip building vector store")
+            return
+        
         Chroma.from_documents(
             metrics,
             OpenAIEmbeddings(),

@@ -128,15 +128,73 @@ def test(file_path: str, type: int = 0):
     df.to_excel(file_path, index=False)
 
 
+def test_with_gemini(file_path: str):
+    question_pairs = read_json("question/gemini_question.json")
+    
+    sql_engine = SqlEngine()
+
+    test_res = []
+
+    llm = ChatModel(
+        prompt="""
+        你是一位DBA高手，我每次会给你两条sql语句，请按照以下步骤判断两条sql是否一致。
+
+        第一步：理解两条sql语句的含义，并构建测试数据。
+        第二步：模拟执行两条sql语句，并对比执行结果。
+        第三步：根据执行结果返回判断并给出理由。
+
+        """,
+        is_json_output=False,
+    )
+
+    for question_pair in tqdm(question_pairs):
+        time.sleep(0.5)
+        question = question_pair["question"]
+
+        try:
+            res = sql_engine.invoke(question)    
+        except Exception as e:
+            print(e)
+            test_res.append(
+                {
+                    "question": question,
+                    "query": "Error",
+                    "llm_query": "Error",
+                    "is_same": "Error",
+                }
+            )
+            continue
+
+        query = question_pair["query"]
+
+        llm_query = res["query"]
+
+        is_same = llm.invoke(f"1. {query}\n2. {llm_query}").content
+
+        test_res.append(
+            {
+                "question": question,
+                "query": query,
+                "llm_query": llm_query,
+                "is_same": is_same,
+            }
+        )
+
+    # 将列表转换为DataFrame
+    df = pd.DataFrame(test_res)
+
+    # 将DataFrame写入Excel文件
+    df.to_excel(file_path, index=False)
+
 if __name__ == "__main__":
     # 初始化日志配置
     init_logging_config()
 
-    for i in range(10):
-        no_original_output = f"res1/no_original_{i}.xlsx"
-        test(no_original_output, 0)
-        with_original_output = f"res1/with_original_{i}.xlsx"
-        test(with_original_output, 1)
+    # for i in range(10):
+    #     no_original_output = f"res1/no_original_{i}.xlsx"
+    #     test(no_original_output, 0)
+    #     with_original_output = f"res1/with_original_{i}.xlsx"
+    #     test(with_original_output, 1)
 
     # with_original_input = "with_original_context.xlsx"
     # with_original_output = "with_original_context_res.xlsx"
@@ -145,3 +203,5 @@ if __name__ == "__main__":
     # no_original_input = "no_original_context.xlsx"
     # no_original_output = "no_original_context_res.xlsx"
     # generate_res(no_original_input, no_original_output)
+
+    test_with_gemini("gemini_res.xlsx")

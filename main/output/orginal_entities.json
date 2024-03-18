@@ -1,100 +1,10 @@
 [
     {
-        "name": "Addresses",
-        "businessSemantics": "Represents the physical locations where individuals reside or businesses operate.",
-        "sourceTable": [
-            "Addresses"
-        ],
-        "joinSql": "SELECT * FROM Addresses"
-    },
-    {
         "name": "Courses",
-        "businessSemantics": "Represents the academic courses offered by an educational institution.",
+        "businessSemantics": "Represents all the courses available for enrollment, including their names, descriptions, and other relevant details.",
         "sourceTable": [
             "Courses"
         ],
         "joinSql": "SELECT * FROM Courses"
-    },
-    {
-        "name": "Departments",
-        "businessSemantics": "Represents the organizational units within an educational institution, each responsible for a specific area of study.",
-        "sourceTable": [
-            "Departments"
-        ],
-        "joinSql": "SELECT * FROM Departments"
-    },
-    {
-        "name": "Degree Programs",
-        "businessSemantics": "Represents the academic programs offered by departments, leading to a specific degree.",
-        "sourceTable": [
-            "Degree_Programs",
-            "Departments"
-        ],
-        "joinSql": "SELECT * FROM Degree_Programs JOIN Departments ON Degree_Programs.department_id = Departments.department_id"
-    },
-    {
-        "name": "Sections",
-        "businessSemantics": "Represents the different sections or groups within a course, potentially offered at different times or by different instructors.",
-        "sourceTable": [
-            "Sections",
-            "Courses"
-        ],
-        "joinSql": "SELECT * FROM Sections JOIN Courses ON Sections.course_id = Courses.course_id"
-    },
-    {
-        "name": "Semesters",
-        "businessSemantics": "Represents the academic terms during which courses are offered.",
-        "sourceTable": [
-            "Semesters"
-        ],
-        "joinSql": "SELECT * FROM Semesters"
-    },
-    {
-        "name": "Students",
-        "businessSemantics": "Represents the individuals enrolled in the educational institution.",
-        "sourceTable": [
-            "Students",
-            "Addresses"
-        ],
-        "joinSql": "SELECT Students.*, Addresses.* FROM Students JOIN Addresses ON Students.current_address_id = Addresses.address_id OR Students.permanent_address_id = Addresses.address_id"
-    },
-    {
-        "name": "Student Enrolment",
-        "businessSemantics": "Represents the enrollment records of students in degree programs during specific semesters.",
-        "sourceTable": [
-            "Student_Enrolment",
-            "Degree_Programs",
-            "Semesters",
-            "Students"
-        ],
-        "joinSql": "SELECT * FROM Student_Enrolment JOIN Degree_Programs ON Student_Enrolment.degree_program_id = Degree_Programs.degree_program_id JOIN Semesters ON Student_Enrolment.semester_id = Semesters.semester_id JOIN Students ON Student_Enrolment.student_id = Students.student_id"
-    },
-    {
-        "name": "Student Enrolment Courses",
-        "businessSemantics": "Represents the courses in which students are enrolled as part of their degree program.",
-        "sourceTable": [
-            "Student_Enrolment_Courses",
-            "Courses",
-            "Student_Enrolment"
-        ],
-        "joinSql": "SELECT * FROM Student_Enrolment_Courses JOIN Courses ON Student_Enrolment_Courses.course_id = Courses.course_id JOIN Student_Enrolment ON Student_Enrolment_Courses.student_enrolment_id = Student_Enrolment.student_enrolment_id"
-    },
-    {
-        "name": "Transcripts",
-        "businessSemantics": "Represents the official records of students' academic performance.",
-        "sourceTable": [
-            "Transcripts"
-        ],
-        "joinSql": "SELECT * FROM Transcripts"
-    },
-    {
-        "name": "Transcript Contents",
-        "businessSemantics": "Represents the specific course results included in a student's transcript.",
-        "sourceTable": [
-            "Transcript_Contents",
-            "Transcripts",
-            "Student_Enrolment_Courses"
-        ],
-        "joinSql": "SELECT * FROM Transcript_Contents JOIN Transcripts ON Transcript_Contents.transcript_id = Transcripts.transcript_id JOIN Student_Enrolment_Courses ON Transcript_Contents.student_course_id = Student_Enrolment_Courses.student_course_id"
     }
 ]

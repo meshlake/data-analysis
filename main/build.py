@@ -17,19 +17,19 @@ if __name__ == "__main__":
 
     logging.info("Start to generate dataset")
     # 生成数据集
-    parse_source_table.main()
+    parse_source_table.main(force=True)
     logging.info("Finish to generate dataset")
 
     logging.info("Start to generate entity")
     # 生成实体
     entity = Entity()
-    entity.build_entities()
+    entity.build_entities(force=True)
     entity.build_vector_store()
     logging.info("Finish to generate entity")
 
     logging.info("Start to generate metrics")
     # 生成指标
     metrics = Metrics()
-    metrics.build_metrics()
+    metrics.build_metrics(force=True)
     metrics.build_vector_store()
-    logging.info("Start to generate dataset")
+    logging.info("Finish to generate metrics")
