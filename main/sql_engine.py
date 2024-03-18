@@ -16,6 +16,7 @@ class SqlEngine:
             
             Rule: 
             1.The field of groupby should be appropriately selected according to the problem, usually an identifier or a unique column
+            2.Entity does not exist in the actual database. Please use Entity's SourceTables to generate sql statements based on the business meaning of Entity.
 
             Please follow the steps below to generate sql statements based on the user's questions and these structural information.
             Step 1: Understand the user’s problem
